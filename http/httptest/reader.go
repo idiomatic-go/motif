@@ -2,6 +2,7 @@ package httptest
 
 import "io"
 
+// ReaderCloser - test type for a body.ReadCloser interface
 type ReaderCloser struct {
 	Reader io.Reader
 	Err    error

@@ -5,10 +5,13 @@ import (
 	"net/http"
 )
 
+// Do - process a "Do" request with the http.DefaultClient
 func Do(req *http.Request) (*http.Response, error) {
 	return DoClient(req, http.DefaultClient)
 }
 
+// DoClient - process a "Do" request with the given client. Also, check the req.Context to determine
+// if there is a "Do" proxy that should be invoked instead of the client request.
 func DoClient(req *http.Request, client *http.Client) (*http.Response, error) {
 	if req == nil {
 		return nil, errors.New("request is nil") //NewStatus(StatusInvalidArgument, doLocation, errors.New("request is nil"))

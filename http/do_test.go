@@ -3,7 +3,7 @@ package http
 import (
 	"context"
 	"fmt"
-	"github.com/idiomatic-go/middleware/http/httptest"
+	"github.com/idiomatic-go/motif/http/httptest"
 	"io"
 	"net/http"
 )
