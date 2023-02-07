@@ -1,0 +1,61 @@
+package messaging
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"github.com/idiomatic-go/middleware/template"
+	"time"
+)
+
+var msg = Message{To: "to-uri", From: "from-uri", Content: []any{
+	"text content",
+	500,
+	Credentials(func() (username, password string, err error) { return "", "", nil }),
+	time.Second,
+	nil,
+	template.NewErrorHandleFn[template.DebugError](),
+	errors.New("this is a content error message"),
+	func() bool { return false },
+	template.NewStatusError("location", errors.New("error message")).SetDuration(time.Second * 2),
+	ActuatorApply(func(ctx context.Context, status **template.Status, uri, requestId, method string) (ActuatorComplete, context.Context, bool) {
+		return func() {}, ctx, false
+	}),
+	template.NewErrorStatusHandleFn[template.DebugError](),
+	DatabaseUrl{"postgres://username:password@database.cloud.timescale.com/database?sslmode=require"},
+}}
+
+func ExampleAccessCredentials() {
+	fmt.Printf("test: AccessCredentials(nil) -> %v\n", AccessCredentials(nil) != nil)
+	fmt.Printf("test: AccessCredentials(msg) -> %v\n", AccessCredentials(&Message{To: "to-uri"}) != nil)
+	fmt.Printf("test: AccessCredentials(msg) -> %v\n", AccessCredentials(&msg) != nil)
+
+	//Output:
+	//test: AccessCredentials(nil) -> false
+	//test: AccessCredentials(msg) -> false
+	//test: AccessCredentials(msg) -> true
+}
+
+func ExampleAccessDatabaseUrl() {
+	fmt.Printf("test: AccessDatabaseUrl(nil) -> %v\n", AccessDatabaseUrl(nil))
+	fmt.Printf("test: AccessDatabaseUrl(msg) -> %v\n", AccessDatabaseUrl(&Message{To: "to-uri"}))
+	fmt.Printf("test: AccessDatabaseUrl(msg) -> %v\n", AccessDatabaseUrl(&msg))
+
+	//Output:
+	//test: AccessDatabaseUrl(nil) -> {}
+	//test: AccessDatabaseUrl(msg) -> {}
+	//test: AccessDatabaseUrl(msg) -> {postgres://username:password@database.cloud.timescale.com/database?sslmode=require}
+
+}
+
+func ExampleAccessActuatorApply() {
+	fmt.Printf("test: AccessActuatorApply(nil) -> [valid:%v]\n", AccessActuatorApply(nil) != nil)
+	fmt.Printf("test: AccessActuatorApply(msg) -> [valid:%v]\n", AccessActuatorApply(&Message{To: "to-uri"}) != nil)
+	fmt.Printf("test: AccessActuatorApply(msg) -> [valid:%v]\n", AccessActuatorApply(&msg) != nil)
+
+	//Output:
+	//test: AccessActuatorApply(nil) -> [valid:false]
+	//test: AccessActuatorApply(msg) -> [valid:false]
+	//test: AccessActuatorApply(msg) -> [valid:true]
+
+}
