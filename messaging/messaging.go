@@ -1,7 +1,7 @@
 package messaging
 
 import (
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
 )
 
 const (
@@ -19,7 +19,7 @@ type Message struct {
 	To      string
 	From    string
 	Event   string
-	Status  *template.Status
+	Status  *runtime.Status
 	Content []any
 	ReplyTo MessageHandler
 }
@@ -49,7 +49,7 @@ func StartupReplyTo(msg Message, successful bool, content ...any) {
 
 */
 
-func ReplyTo(msg Message, status *template.Status) {
+func ReplyTo(msg Message, status *runtime.Status) {
 	if msg.ReplyTo == nil {
 		return
 	}

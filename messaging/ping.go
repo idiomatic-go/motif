@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
+	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -14,7 +15,7 @@ const (
 
 var pingLocation = pkgPath + "/ping"
 
-func Ping[E template.ErrorHandler](ctx context.Context, uri string) (status *template.Status) {
+func Ping[E template.ErrorHandler](ctx context.Context, uri string) (status *runtime.Status) {
 	var e E
 
 	if uri == "" {
@@ -34,9 +35,9 @@ func Ping[E template.ErrorHandler](ctx context.Context, uri string) (status *tem
 			continue //return e.HandleWithContext(ctx, pingLocation, err1)
 		}
 		if result.Status == nil {
-			return e.HandleWithContext(ctx, pingLocation, errors.New(fmt.Sprintf("ping response status not available: [%v]", uri))).SetCode(template.StatusNotProvided)
+			return e.HandleWithContext(ctx, pingLocation, errors.New(fmt.Sprintf("ping response status not available: [%v]", uri))).SetCode(runtime.StatusNotProvided)
 		}
 		return result.Status
 	}
-	return e.HandleWithContext(ctx, pingLocation, errors.New(fmt.Sprintf("ping response time out: [%v]", uri))).SetCode(template.StatusDeadlineExceeded)
+	return e.HandleWithContext(ctx, pingLocation, errors.New(fmt.Sprintf("ping response time out: [%v]", uri))).SetCode(runtime.StatusDeadlineExceeded)
 }

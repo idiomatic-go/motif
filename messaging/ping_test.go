@@ -3,7 +3,8 @@ package messaging
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
+	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -43,7 +44,7 @@ func ExamplePing() {
 
 	//Output:
 	//test: Ping(good) -> [OK] [duration:0s]
-	//[[] github.com/idiomatic-go/middleware/messaging/ping [ping response time out: [urn:ping:bad]]]
+	//[[] github.com/idiomatic-go/motif/messaging/ping [ping response time out: [urn:ping:bad]]]
 	//test: Ping(bad) -> [DeadlineExceeded] [duration:0s]
 	//test: Ping(error) -> [Internal [ping depends error message]] [duration:0s]
 	//test: Ping(delay) -> [OK] [duration:0s]
@@ -57,7 +58,7 @@ func pingGood(c chan Message) {
 			if !open {
 				return
 			}
-			ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+			ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 		default:
 		}
 	}
@@ -71,7 +72,7 @@ func pingBad(c chan Message) {
 				return
 			}
 			time.Sleep(time.Second * 4)
-			ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+			ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 		default:
 		}
 	}
@@ -86,7 +87,7 @@ func pingError(c chan Message, err error) {
 			}
 			if err != nil {
 				time.Sleep(time.Second)
-				ReplyTo(msg, template.NewStatusError(pingLocation, err).SetDuration(time.Since(start)))
+				ReplyTo(msg, runtime.NewStatusError(pingLocation, err).SetDuration(time.Since(start)))
 			}
 		default:
 		}
@@ -101,7 +102,7 @@ func pingDelay(c chan Message) {
 				return
 			}
 			time.Sleep(time.Second)
-			ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+			ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 		default:
 		}
 	}

@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/idiomatic-go/middleware/http/httptest"
+	"github.com/idiomatic-go/motif/http/httptest"
 	"net/http"
 	"strings"
 )

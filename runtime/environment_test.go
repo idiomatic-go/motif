@@ -2,7 +2,7 @@ package runtime_test
 
 import (
 	"fmt"
-	"github.com/idiomatic-go/middleware/runtime"
+	"github.com/idiomatic-go/motif/runtime"
 )
 
 func ExampleDevEnv() {

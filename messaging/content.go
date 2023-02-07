@@ -2,7 +2,7 @@ package messaging
 
 import (
 	"context"
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
 )
 
 type ContentMap map[string][]any
@@ -13,7 +13,7 @@ type DatabaseUrl struct {
 	Url string
 }
 
-type ActuatorApply func(ctx context.Context, status **template.Status, uri, requestId, method string) (fn ActuatorComplete, newCtx context.Context, rateLimited bool)
+type ActuatorApply func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (fn ActuatorComplete, newCtx context.Context, rateLimited bool)
 
 type ActuatorComplete func()
 

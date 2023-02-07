@@ -3,7 +3,8 @@ package messaging
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
+	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -89,7 +90,7 @@ func ExampleStartup_Failure() {
 	fmt.Printf("test: Startup() -> [%v]\n", status)
 
 	//Output:
-	//[[] github.com/idiomatic-go/middleware/messaging/startup [startup failure error message]]
+	//[[] github.com/idiomatic-go/motif/messaging/startup [startup failure error message]]
 	//test: Startup() -> [Internal]
 
 }
@@ -101,7 +102,7 @@ func startupGood(c chan Message) {
 			if !open {
 				return
 			}
-			ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+			ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 		default:
 		}
 	}
@@ -115,7 +116,7 @@ func startupBad(c chan Message) {
 				return
 			}
 			time.Sleep(time.Second + time.Millisecond*100)
-			ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+			ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 		default:
 		}
 	}
@@ -130,10 +131,10 @@ func startupDepends(c chan Message, err error) {
 			}
 			if err != nil {
 				time.Sleep(time.Second)
-				ReplyTo(msg, template.NewStatusError(startupLocation, err).SetDuration(time.Since(start)))
+				ReplyTo(msg, runtime.NewStatusError(startupLocation, err).SetDuration(time.Since(start)))
 			} else {
 				time.Sleep(time.Second + (time.Millisecond * 900))
-				ReplyTo(msg, template.NewStatusOK().SetDuration(time.Since(start)))
+				ReplyTo(msg, runtime.NewStatusOK().SetDuration(time.Since(start)))
 			}
 
 		default:

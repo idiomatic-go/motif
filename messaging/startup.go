@@ -3,7 +3,8 @@ package messaging
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/middleware/template"
+	"github.com/idiomatic-go/motif/runtime"
+	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -35,13 +36,13 @@ func Shutdown() {
 	directory.Shutdown()
 }
 
-func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *template.Status) {
+func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
 	var e E
 	var failures []string
 	var count = directory.Count()
 
 	if count == 0 {
-		return template.NewStatusOK()
+		return runtime.NewStatusOK()
 	}
 	cache := NewMessageCache()
 	toSend := createToSend(content, NewMessageCacheHandler(cache))
@@ -53,19 +54,19 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 			continue
 		}
 		// Check for failed resources
-		failures = cache.Exclude(StartupEvent, template.StatusOK)
+		failures = cache.Exclude(StartupEvent, runtime.StatusOK)
 		if len(failures) == 0 {
 			handleStatus[O](cache)
-			return template.NewStatusOK()
+			return runtime.NewStatusOK()
 		}
 		break
 	}
 	Shutdown()
 	if len(failures) > 0 {
 		handleErrors[E](failures, cache)
-		return template.NewStatusCode(template.StatusInternal)
+		return runtime.NewStatusCode(runtime.StatusInternal)
 	}
-	return e.Handle(startupLocation, errors.New(fmt.Sprintf("response counts < directory entries [%v] [%v]", cache.Count(), directory.Count()))).SetCode(template.StatusDeadlineExceeded)
+	return e.Handle(startupLocation, errors.New(fmt.Sprintf("response counts < directory entries [%v] [%v]", cache.Count(), directory.Count()))).SetCode(runtime.StatusDeadlineExceeded)
 }
 
 func createToSend(cm ContentMap, fn MessageHandler) messageMap {
