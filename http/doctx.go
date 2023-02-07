@@ -18,10 +18,10 @@ var (
 	doContextKey = &contextKey{"http-do"}
 )
 
-// DoProxy - Http client "Do" proxy type
+// DoProxy - Http client.Do proxy type
 type DoProxy func(req *http.Request) (*http.Response, error)
 
-// ContextWithDo - creates a new Context with a "Do" proxy function
+// ContextWithDo - creates a new Context with a DoProxy function
 func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
@@ -44,7 +44,7 @@ func ContextDo(req *http.Request) (*http.Response, error) {
 	return nil, errors.New("context proxy is not a valid type DoProxy(req *http.Request)")
 }
 
-// IsContextDo - determine if this context contains a "Do" proxy
+// IsContextDo - determine if this context contains a DoProxy
 func IsContextDo(c context.Context) bool {
 	if c == nil {
 		return false
