@@ -20,20 +20,20 @@ func ErrorProxy(req *http.Request) (*http.Response, error) {
 	}
 	switch req.URL.String() {
 	case HttpErrorUri:
-		return HttpErrorResponse(req)
+		return HttpErrorProxy(req)
 	case BodyIOErrorUri:
-		return BodyIOErrorResponse(req)
+		return BodyIOErrorProxy(req)
 	}
 	return nil, errors.New(fmt.Sprintf("invalid request URL: %v", req.URL.String()))
 }
 
-// HttpErrorResponse - reusable http error response
-func HttpErrorResponse(req *http.Request) (*http.Response, error) {
+// HttpErrorProxy - reusable http error proxy
+func HttpErrorProxy(req *http.Request) (*http.Response, error) {
 	return nil, http.ErrHijacked
 }
 
-// BodyIOErrorResponse - reusable body I/O error response
-func BodyIOErrorResponse(req *http.Request) (*http.Response, error) {
+// BodyIOErrorProxy - reusable body I/O error proxy
+func BodyIOErrorProxy(req *http.Request) (*http.Response, error) {
 	return bodyIOErrorResponse, nil
 }
 
