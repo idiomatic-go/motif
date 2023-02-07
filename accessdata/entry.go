@@ -99,11 +99,11 @@ func NewEgressEntry(start time.Time, duration time.Duration, actState map[string
 	return e
 }
 
-func (l *Entry) isIngress() bool {
+func (l *Entry) IsIngress() bool {
 	return l.Traffic == IngressTraffic
 }
 
-func (l *Entry) isEgress() bool {
+func (l *Entry) IsEgress() bool {
 	return l.Traffic == EgressTraffic
 }
 
