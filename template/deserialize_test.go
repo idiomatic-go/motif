@@ -31,26 +31,28 @@ type addressV2 struct {
 }
 
 func ExampleDeserialize() {
-	result, status := Deserialize[[]byte](nil)
-	fmt.Printf("test: Deserialize[[]byte](nil) -> [%v] [status:%v]\n", string(result), status)
+	result, status := Deserialize[DebugError, []byte](nil)
+	fmt.Printf("test: Deserialize[DebugError,[]byte](nil) -> [%v] [status:%v]\n", string(result), status)
 
 	resp := new(http.Response)
-	result, status = Deserialize[[]byte](resp.Body)
-	fmt.Printf("test: Deserialize[[]byte](resp) -> [%v] [status:%v]\n", string(result), status)
+	result, status = Deserialize[DebugError, []byte](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,[]byte](resp) -> [%v] [status:%v]\n", string(result), status)
 
 	resp.Body = &httptest.ReaderCloser{Reader: strings.NewReader("Hello World String"), Err: nil}
-	result, status = Deserialize[[]byte](resp.Body)
-	fmt.Printf("test: Deserialize[[]byte](resp) -> [%v] [status:%v]\n", string(result), status)
+	result, status = Deserialize[DebugError, []byte](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,[]byte](resp) -> [%v] [status:%v]\n", string(result), status)
 
 	resp.Body = &httptest.ReaderCloser{Reader: bytes.NewReader([]byte("Hello World []byte")), Err: nil}
-	result2, status2 := Deserialize[[]byte](resp.Body)
-	fmt.Printf("test: Deserialize[[]byte](resp) -> [%v] [status:%v]\n", string(result2), status2)
+	result2, status2 := Deserialize[DebugError, []byte](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,[]byte](resp) -> [%v] [status:%v]\n", string(result2), status2)
 
 	//Output:
-	//test: Deserialize[[]byte](nil) -> [] [status:Invalid Content [body is nil]]
-	//test: Deserialize[[]byte](resp) -> [] [status:Invalid Content [body is nil]]
-	//test: Deserialize[[]byte](resp) -> [Hello World String] [status:OK]
-	//test: Deserialize[[]byte](resp) -> [Hello World []byte] [status:OK]
+	//[[] github.com/idiomatic-go/motif/template/deserialize [body is nil]]
+	//test: Deserialize[DebugError,[]byte](nil) -> [] [status:Invalid Content]
+	//[[] github.com/idiomatic-go/motif/template/deserialize [body is nil]]
+	//test: Deserialize[DebugError,[]byte](resp) -> [] [status:Invalid Content]
+	//test: Deserialize[DebugError,[]byte](resp) -> [Hello World String] [status:OK]
+	//test: Deserialize[DebugError,[]byte](resp) -> [Hello World []byte] [status:OK]
 
 }
 
@@ -67,8 +69,8 @@ func ExampleDeserialize_Decode() {
 	resp := new(http.Response)
 	resp.Body = &httptest.ReaderCloser{Reader: bytes.NewReader(bufV1), Err: nil}
 
-	result, status := Deserialize[addressV1](resp.Body)
-	fmt.Printf("test: Deserialize[addressV1](resp) -> [%v] [status:%v]\n", result, status)
+	result, status := Deserialize[DebugError, addressV1](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,addressV1](resp) -> [%v] [status:%v]\n", result, status)
 
 	addrV2 := addressV2{
 		Name:   "Bob Smith",
@@ -81,17 +83,19 @@ func ExampleDeserialize_Decode() {
 	resp = new(http.Response)
 	resp.Body = &httptest.ReaderCloser{Reader: bytes.NewReader(bufV2), Err: nil}
 
-	result2, status2 := Deserialize[addressV2](resp.Body)
-	fmt.Printf("test: Deserialize[addressV2](resp) -> [%v] [status:%v]\n", result2, status2)
+	result2, status2 := Deserialize[DebugError, addressV2](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,addressV2](resp) -> [%v] [status:%v]\n", result2, status2)
 
 	resp = new(http.Response)
 	resp.Body = &httptest.ReaderCloser{Reader: bytes.NewReader(bufV2), Err: nil}
 
-	result3, status3 := Deserialize[addressV1](resp.Body)
-	fmt.Printf("test: Deserialize[addressV1](resp) -> [%v] [status:%v]\n", result3, status3)
+	result3, status3 := Deserialize[DebugError, addressV1](resp.Body)
+	fmt.Printf("test: Deserialize[DebugError,addressV1](resp) -> [%v] [status:%v]\n", result3, status3)
 
 	//Output:
-	//test: Deserialize[addressV1](resp) -> [{Bob Smith 123 Oak Avenue New Orleans LA 12345}] [status:OK]
-	//test: Deserialize[addressV2](resp) -> [{Bob Smith 123 Oak Avenue New Orleans Louisiana {12345 1234}}] [status:OK]
-	//test: Deserialize[addressV1](resp) -> [{Bob Smith 123 Oak Avenue New Orleans  }] [status:Json Decode Failure [json: cannot unmarshal object into Go struct field addressV1.Zip of type string]]
+	//test: Deserialize[DebugError,addressV1](resp) -> [{Bob Smith 123 Oak Avenue New Orleans LA 12345}] [status:OK]
+	//test: Deserialize[DebugError,addressV2](resp) -> [{Bob Smith 123 Oak Avenue New Orleans Louisiana {12345 1234}}] [status:OK]
+	//[[] github.com/idiomatic-go/motif/template/deserialize [json: cannot unmarshal object into Go struct field addressV1.Zip of type string]]
+	//test: Deserialize[DebugError,addressV1](resp) -> [{Bob Smith 123 Oak Avenue New Orleans  }] [status:Json Decode Failure]
+
 }
