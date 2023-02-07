@@ -2,12 +2,6 @@ github.com/felixge/httpsnoop v1.0.3 h1:s/nj+GCswXYzN5v2DpNMuMQYe+0DDwt5WVCU6CWBd
 github.com/felixge/httpsnoop v1.0.3/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
-github.com/idiomatic-go/middleware v0.0.0-20230205083045-ec20a7b24c48 h1:8Q22B7QE9eNz+ZTUS+nz6pBsn/AH6CGiTmxKsJppzhM=
-github.com/idiomatic-go/middleware v0.0.0-20230205083045-ec20a7b24c48/go.mod h1:fjbfvQbXWIYCJ8s1HjT2bteAoyplLw440xTDsCllhS8=
-github.com/idiomatic-go/resiliency v0.0.0-20230206121654-66df99764d67 h1:CYCwlTnwrAzDcXOnFFiiZc5cWBYvADg/r0qbp0PZjR0=
-github.com/idiomatic-go/resiliency v0.0.0-20230206121654-66df99764d67/go.mod h1:woMYfaJO+8jkQSQ3+Cq5hkYeT+dmZCtww6PZEMte0CI=
-golang.org/x/time v0.3.0 h1:rg5rLMjNzMS1RkNLzCG38eapWhnYLFYXDXj2gOlr8j4=
-golang.org/x/time v0.3.0/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
 google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6 h1:a2S6M0+660BgMNl++4JPlcAO/CjkqYItDEZwkoDQK7c=
 google.golang.org/grpc v1.52.3 h1:pf7sOysg4LdgBqduXveGKrcEwbStiK2rtfghdzlUYDQ=
 google.golang.org/grpc v1.52.3/go.mod h1:pu6fVzoFb+NBYNAvQL08ic+lvB2IojljRYuun5vorUY=
