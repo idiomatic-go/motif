@@ -61,7 +61,7 @@ func Example_Value_Request() {
 	req.Header.Add(RequestIdHeaderName, "123-456-789")
 	req.Header.Add(FromRouteHeaderName, "calling-route")
 	data = &Entry{}
-	data.addRequest(req)
+	data.AddRequest(req)
 	fmt.Printf("test: Value(\"method\") -> [%v]\n", data.Value(op))
 
 	fmt.Printf("test: Value(\"headers\") -> [request-id:%v] [from-route:%v]\n", data.Value(RequestIdOperator), data.Value(RequestFromRouteOperator))
@@ -80,7 +80,7 @@ func Example_Value_Response() {
 
 	resp := &http.Response{StatusCode: 200}
 	data = &Entry{}
-	data.addResponse(resp)
+	data.AddResponse(resp)
 	fmt.Printf("test: Value(\"code\") -> [%v]\n", data.Value(op))
 
 	//Output:
@@ -92,7 +92,7 @@ func Example_Value_Request_Header() {
 	req, _ := http.NewRequest("", "www.google.com", nil)
 	req.Header.Add("customer", "Ted's Bait & Tackle")
 	data := Entry{}
-	data.addRequest(req)
+	data.AddRequest(req)
 	fmt.Printf("test: Value(\"customer\") -> [%v]\n", data.Value("%REQ(customer)%"))
 
 	//Output:
@@ -105,6 +105,6 @@ func Example_Entry() {
 	fmt.Printf("test: String() -> {%v}\n", e)
 
 	//Output:
-	//test: String() -> {start:0001-01-01 00:00:00.000000 ,duration:0 ,traffic:egress ,route: ,request-id:123-456-789 ,status-code:200 ,method:GET ,host:postgres ,path:query.access-log ,timeout: ,rate-limit: ,rate-burst: ,retry: ,retry-rate-limit: ,retry-rate-burst: ,status-flags:RL}
+	//test: String() -> {traffic:egress, route:, request-id:123-456-789, status-code:200, method:GET, url:urn:postgres:query.access-log, host:postgres, path:query.access-log, timeout:, rate-limit:, rate-burst:, retry:, retry-rate-limit:, retry-rate-burst:, status-flags:RL}
 
 }

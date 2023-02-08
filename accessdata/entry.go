@@ -70,8 +70,8 @@ func newEntry(traffic string, start time.Time, duration time.Duration, actState 
 		actState = make(map[string]string, 1)
 	}
 	l.ActState = actState
-	l.addRequest(req)
-	l.addResponse(resp)
+	l.AddRequest(req)
+	l.AddResponse(resp)
 	l.StatusFlags = statusFlags
 	return l
 }
@@ -93,7 +93,7 @@ func NewHttpEgressEntry(start time.Time, duration time.Duration, actState map[st
 func NewEgressEntry(start time.Time, duration time.Duration, actState map[string]string, statusCode int, uri, requestId, method, statusFlags string) *Entry {
 	e := newEntry(EgressTraffic, start, duration, actState, nil, nil, statusFlags)
 	e.StatusCode = statusCode
-	e.addUrl(uri)
+	e.AddUrl(uri)
 	e.RequestId = requestId
 	e.Method = method
 	return e
@@ -107,11 +107,11 @@ func (l *Entry) IsEgress() bool {
 	return l.Traffic == EgressTraffic
 }
 
-func (l *Entry) isPing() bool {
+func (l *Entry) IsPing() bool {
 	return IsPingRoute(l.Traffic, l.Path)
 }
 
-func (l *Entry) addResponse(resp *http.Response) {
+func (l *Entry) AddResponse(resp *http.Response) {
 	if resp == nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (l *Entry) addResponse(resp *http.Response) {
 	l.BytesReceived = resp.ContentLength
 }
 
-func (l *Entry) addUrl(uri string) {
+func (l *Entry) AddUrl(uri string) {
 	if uri == "" {
 		return
 	}
@@ -146,7 +146,7 @@ func (l *Entry) addUrl(uri string) {
 	}
 }
 
-func (l *Entry) addRequest(req *http.Request) {
+func (l *Entry) AddRequest(req *http.Request) {
 	if req == nil {
 		return
 	}
@@ -169,7 +169,7 @@ func (l *Entry) addRequest(req *http.Request) {
 func (l *Entry) Value(value string) string {
 	switch value {
 	case TrafficOperator:
-		if l.isPing() {
+		if l.IsPing() {
 			return PingTraffic
 		}
 		return l.Traffic
