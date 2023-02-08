@@ -1,5 +1,7 @@
 package accessdata
 
+type Accessor func(entry *Entry)
+
 // SetOrigin - required to track service identification
 func SetOrigin(o Origin) {
 	opt.origin = o
