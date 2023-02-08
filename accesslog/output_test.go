@@ -5,36 +5,37 @@ import (
 	"github.com/idiomatic-go/motif/accessdata"
 )
 
-type OutputHandlerFn func(s string)
-
-func (OutputHandlerFn) Write(s string) {
-
-}
-
 func ExampleOutputHandler() {
-	fmt.Printf("test: Output[NilOutputHandler](s)\n")
-	Output[NilOutputHandler](nil, nil)
+	fmt.Printf("test: Output[NilOutputHandler,accessdata.TextFormatter](nil,nil)\n")
+	logTest[NilOutputHandler, accessdata.TextFormatter](nil, nil)
 
-	fmt.Printf("test: Output[DebugOutputHandler](s)\n")
-	Output[DebugOutputHandler]([]accessdata.Operator{{"error", "message"}}, accessdata.NewEntry())
+	fmt.Printf("test: Output[DebugOutputHandler,accessdata.JsonFormatter](operators,data)\n")
+	ops := []accessdata.Operator{{"error", "message"}}
+	logTest[DebugOutputHandler, accessdata.JsonFormatter](ops, accessdata.NewEntry())
 
-	fmt.Printf("test: Output[TestOutputHandler](s)\n")
-	Output[TestOutputHandler](nil, nil)
+	fmt.Printf("test: Output[TestOutputHandler,accessdata.JsonFormatter](nil,nil)\n")
+	logTest[TestOutputHandler, accessdata.JsonFormatter](nil, nil)
 
-	fmt.Printf("test: Output[LogOutputHandler](s)\n")
-	Output[LogOutputHandler](nil, nil)
+	fmt.Printf("test: Output[TestOutputHandler,accessdata.JsonFormatter](ops,data)\n")
+	logTest[TestOutputHandler, accessdata.JsonFormatter](ops, accessdata.NewEntry())
+
+	fmt.Printf("test: Output[LogOutputHandler,accessdata.JsonFormatter](ops,data)\n")
+	logTest[LogOutputHandler, accessdata.JsonFormatter](ops, accessdata.NewEntry())
 
 	//Output:
-	//test: Output[NilOutputHandler](s)
-	//test: Output[DebugOutputHandler](s)
+	//test: Output[NilOutputHandler,accessdata.TextFormatter](nil,nil)
+	//test: Output[DebugOutputHandler,accessdata.JsonFormatter](operators,data)
 	//{"error":"message"}
-	//test: Output[TestOutputHandler](s)
+	//test: Output[TestOutputHandler,accessdata.JsonFormatter](nil,nil)
 	//test: Write() -> [{}]
-	//test: Output[LogOutputHandler](s)
+	//test: Output[TestOutputHandler,accessdata.JsonFormatter](ops,data)
+	//test: Write() -> [{"error":"message"}]
+	//test: Output[LogOutputHandler,accessdata.JsonFormatter](ops,data)
 
 }
 
-func Output[O OutputHandler](items []accessdata.Operator, data *accessdata.Entry) {
+func logTest[O OutputHandler, F accessdata.Formatter](items []accessdata.Operator, data *accessdata.Entry) {
 	var o O
-	o.Write(items, data)
+	var f F
+	o.Write(items, data, f)
 }

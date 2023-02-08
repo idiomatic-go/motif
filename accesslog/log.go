@@ -28,12 +28,46 @@ func InitEgressOperators(config []accessdata.Operator) error {
 	return err
 }
 
-// Log - handles writing the access log entry via the OutputHandler
-func Log[O OutputHandler](entry *accessdata.Entry) {
+// Log - handles writing the access log entry utilizing the OutputHandler and Formatter
+func Log[O OutputHandler, F accessdata.Formatter](data *accessdata.Entry) {
 	var o O
+	var f F
+	if data == nil {
+		o.Write([]accessdata.Operator{{errorName, errorNilEntry}}, accessdata.NewEntry(), f)
+		return
+	}
+	if data.IsIngress() {
+		if !opt.ingress {
+			return
+		}
+		if len(ingressOperators) == 0 {
+			o.Write(emptyOperators(data), accessdata.NewEntry(), f)
+			return
+		}
+		o.Write(ingressOperators, data, f)
+	} else {
+		if !opt.egress {
+			return
+		}
+		if len(egressOperators) == 0 {
+			o.Write(emptyOperators(data), accessdata.NewEntry(), f)
+			return
+		}
+		o.Write(egressOperators, data, f)
+	}
+}
 
-	if entry == nil {
-		o.Write([]accessdata.Operator{{errorName, errorNilEntry}}, accessdata.NewEntry())
+func emptyOperators(data *accessdata.Entry) []accessdata.Operator {
+	return []accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, data.Traffic)}}
+}
+
+/*
+func Write(items []accessdata.Operator, data *accessdata.Entry, formatter accessdata.Formatter) {
+	var o O
+	var f accessdata.Formatter
+
+	if data == nil {
+		o.Write([]accessdata.Operator{{errorName, errorNilEntry}}, accessdata.NewEntry(),f)
 		return
 	}
 	if entry.IsIngress() {
@@ -41,18 +75,20 @@ func Log[O OutputHandler](entry *accessdata.Entry) {
 			return
 		}
 		if len(ingressOperators) == 0 {
-			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry())
+			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry(),f)
 			return
 		}
-		o.Write(ingressOperators, entry)
+		o.Write(ingressOperators, entry,f)
 	} else {
 		if !opt.egress {
 			return
 		}
 		if len(egressOperators) == 0 {
-			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry())
+			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry(),f)
 			return
 		}
-		o.Write(egressOperators, entry)
+		o.Write(egressOperators, entry,f)
 	}
 }
+
+*/
