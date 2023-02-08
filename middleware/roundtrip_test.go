@@ -48,7 +48,7 @@ func init() {
 	}
 
 	SetLogFn(func(entry *accessdata.Entry) {
-		accesslog.Log[accesslog.TestOutputHandler](entry)
+		accesslog.Log[accesslog.TestOutputHandler, accessdata.JsonFormatter](entry)
 	},
 	)
 }

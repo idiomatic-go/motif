@@ -29,36 +29,36 @@ func InitEgressOperators(config []accessdata.Operator) error {
 }
 
 // Log - handles writing the access log entry utilizing the OutputHandler and Formatter
-func Log[O OutputHandler, F accessdata.Formatter](data *accessdata.Entry) {
+func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 	var o O
 	var f F
-	if data == nil {
+	if entry == nil {
 		o.Write([]accessdata.Operator{{errorName, errorNilEntry}}, accessdata.NewEntry(), f)
 		return
 	}
-	if data.IsIngress() {
+	if entry.IsIngress() {
 		if !opt.ingress {
 			return
 		}
 		if len(ingressOperators) == 0 {
-			o.Write(emptyOperators(data), accessdata.NewEntry(), f)
+			o.Write(emptyOperators(entry), accessdata.NewEntry(), f)
 			return
 		}
-		o.Write(ingressOperators, data, f)
+		o.Write(ingressOperators, entry, f)
 	} else {
 		if !opt.egress {
 			return
 		}
 		if len(egressOperators) == 0 {
-			o.Write(emptyOperators(data), accessdata.NewEntry(), f)
+			o.Write(emptyOperators(entry), accessdata.NewEntry(), f)
 			return
 		}
-		o.Write(egressOperators, data, f)
+		o.Write(egressOperators, entry, f)
 	}
 }
 
-func emptyOperators(data *accessdata.Entry) []accessdata.Operator {
-	return []accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, data.Traffic)}}
+func emptyOperators(entry *accessdata.Entry) []accessdata.Operator {
+	return []accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}
 }
 
 /*

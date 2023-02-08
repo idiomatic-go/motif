@@ -3,20 +3,18 @@ package middleware
 import (
 	"fmt"
 	"github.com/idiomatic-go/motif/accessdata"
+	"github.com/idiomatic-go/motif/accesslog"
 )
 
-// LogAccessData - logging type
-type LogAccessData func(entry *accessdata.Entry)
-
 // SetLogFn - allows setting an application configured logging function
-func SetLogFn(fn LogAccessData) {
+func SetLogFn(fn accesslog.LogFn) {
 	if fn != nil {
 		logFn = fn
 	}
 }
 
-var logFn LogAccessData = defaultAccess
+var logFn = defaultLog
 
-var defaultAccess LogAccessData = func(entry *accessdata.Entry) {
+var defaultLog accesslog.LogFn = func(entry *accessdata.Entry) {
 	fmt.Printf("{%v}\n", entry)
 }

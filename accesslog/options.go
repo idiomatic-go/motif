@@ -1,5 +1,9 @@
 package accesslog
 
+import "github.com/idiomatic-go/motif/accessdata"
+
+type LogFn func(entry *accessdata.Entry)
+
 // SetIngressLogStatus - enable/disable ingress logging
 func SetIngressLogStatus(enabled bool) {
 	opt.ingress = enabled
