@@ -6,6 +6,19 @@ import (
 	"net/http"
 )
 
+func ExampleContextWithRequestExisting() {
+	ctx := ContextWithRequestId(context.Background(), "123-456-abc")
+	fmt.Printf("test: ContextWithRequestId(context.Background(),id) -> %v [newContext:%v]\n", ContextRequestId(ctx), ctx != context.Background())
+
+	ctxNew := ContextWithRequestId(ctx, "123-456-abc-xyz")
+	fmt.Printf("test: ContextWithRequestId(ctx,id) -> %v [newContext:%v]\n", ContextRequestId(ctx), ctxNew != ctx)
+
+	//Output:
+	//test: ContextWithRequestId(context.Background(),id) -> 123-456-abc [newContext:true]
+	//test: ContextWithRequestId(ctx,id) -> 123-456-abc [newContext:false]
+
+}
+
 func ExampleContextWithRequest() {
 	ctx := ContextWithRequestId(context.Background(), "123-456-abc")
 	fmt.Printf("test: ContextWithRequestId(ctx,id) -> %v\n", ContextRequestId(ctx))

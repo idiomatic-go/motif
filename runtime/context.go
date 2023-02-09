@@ -24,6 +24,11 @@ var (
 func ContextWithRequestId(ctx context.Context, requestId string) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
+	} else {
+		i := ctx.Value(requestContextKey)
+		if i != nil {
+			return ctx
+		}
 	}
 	if requestId == "" {
 		requestId = uuid.New().String()

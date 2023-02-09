@@ -25,6 +25,10 @@ type DoProxy func(req *http.Request) (*http.Response, error)
 func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
+	} else {
+		if IsContextDo(ctx) {
+			return ctx
+		}
 	}
 	if fn == nil {
 		return ctx

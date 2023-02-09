@@ -12,6 +12,19 @@ func doDocxtProxy(req *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
+func ExampleContextWithDoExisting() {
+	ctx := ContextWithDo(context.Background(), doDocxtProxy)
+	fmt.Printf("test: ContextWithDo(context.Background(),doDocxtProxy) -> [ctxDo:%v] [newCtx:%v]\n", IsContextDo(ctx), ctx != context.Background())
+
+	ctxNew := ContextWithDo(ctx, doDocxtProxy)
+	fmt.Printf("test: ContextWithDo(ctx,doDocxtProxy) -> [ctxDo:%v] [newCtx:%v]\n", IsContextDo(ctx), ctxNew != ctx)
+
+	//Output:
+	//test: ContextWithDo(context.Background(),doDocxtProxy) -> [ctxDo:true] [newCtx:true]
+	//test: ContextWithDo(ctx,doDocxtProxy) -> [ctxDo:true] [newCtx:false]
+	
+}
+
 func ExampleContextWithDo() {
 	ctx := ContextWithDo(nil, nil)
 	fmt.Printf("test: ContextWithDo(nil,nil) -> [ctxDo:%v]\n", IsContextDo(ctx))
