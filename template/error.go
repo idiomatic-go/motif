@@ -13,7 +13,7 @@ type ErrorHandleFn func(location string, errs ...error) *runtime.Status
 // ErrorStatusHandleFn - function type for error status handling
 type ErrorStatusHandleFn func(s *runtime.Status) *runtime.Status
 
-// ErrorHandler - error handler interface
+// ErrorHandler - template parameter error handler interface
 type ErrorHandler interface {
 	Handle(location string, errs ...error) *runtime.Status
 	HandleWithContext(ctx context.Context, location string, errs ...error) *runtime.Status

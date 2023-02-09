@@ -11,6 +11,7 @@ const (
 	EndDelimiter   = "}"
 )
 
+// Resolver - template parameter name value lookup
 type Resolver interface {
 	Lookup(name string) (string, error)
 }

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// OutputHandler - interface used by Log to write the operators and data
+// OutputHandler - template parameter interface for selecting the output when logging
 type OutputHandler interface {
 	Write(items []accessdata.Operator, data *accessdata.Entry, formatter accessdata.Formatter)
 }

@@ -1,5 +1,6 @@
 package accessdata
 
+// Formatter - template parameter interface to select formatting
 type Formatter interface {
 	Format(items []Operator, data *Entry) string
 }

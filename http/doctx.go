@@ -21,7 +21,7 @@ var (
 // DoProxy - Http client.Do proxy type
 type DoProxy func(req *http.Request) (*http.Response, error)
 
-// ContextWithDo - creates a new Context with a DoProxy function
+// ContextWithDo - DoProxy context creation
 func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
 	if ctx == nil {
 		ctx = context.Background()
