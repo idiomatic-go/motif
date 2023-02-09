@@ -20,17 +20,6 @@ var (
 	requestContextKey = &contextKey{"request-id"}
 )
 
-// ContextWithRequest - creates a new Context with a request id from the request headers
-func ContextWithRequest(req *http.Request) context.Context {
-	if req == nil || req.Header == nil {
-		return context.Background()
-	}
-	if req.Header.Get(xRequestIdName) == "" {
-		req.Header.Add(xRequestIdName, uuid.New().String())
-	}
-	return ContextWithRequestId(req.Context(), req.Header.Get(xRequestIdName))
-}
-
 // ContextWithRequestId - creates a new Context with a request id
 func ContextWithRequestId(ctx context.Context, requestId string) context.Context {
 	if ctx == nil {
@@ -40,6 +29,17 @@ func ContextWithRequestId(ctx context.Context, requestId string) context.Context
 		requestId = uuid.New().String()
 	}
 	return context.WithValue(ctx, requestContextKey, requestId)
+}
+
+// ContextWithRequest - creates a new Context with a request id from the request headers
+func ContextWithRequest(req *http.Request) context.Context {
+	if req == nil || req.Header == nil {
+		return context.Background()
+	}
+	if req.Header.Get(xRequestIdName) == "" {
+		req.Header.Add(xRequestIdName, uuid.New().String())
+	}
+	return ContextWithRequestId(req.Context(), req.Header.Get(xRequestIdName))
 }
 
 // ContextRequestId - return the requestId from a Context

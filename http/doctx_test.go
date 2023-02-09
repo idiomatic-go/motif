@@ -51,5 +51,5 @@ func ExampleContextDo() {
 	//test: ContextDo(req-background ctx) -> [error:context value is nil for key: [http-do]] [resp:false]
 	//test: IsContextDoInRequest(req) -> true
 	//test: ContextDo(req) -> [error:<nil>] [status:200]
-	
+
 }
