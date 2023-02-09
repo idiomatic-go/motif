@@ -23,7 +23,7 @@ var (
 // ContextWithRequest - creates a new Context with a request id from the request headers
 func ContextWithRequest(req *http.Request) context.Context {
 	if req == nil || req.Header == nil {
-		return ContextWithRequestId(nil, "")
+		return context.Background()
 	}
 	if req.Header.Get(xRequestIdName) == "" {
 		req.Header.Add(xRequestIdName, uuid.New().String())

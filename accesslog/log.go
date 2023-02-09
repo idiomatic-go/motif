@@ -60,35 +60,3 @@ func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 func emptyOperators(entry *accessdata.Entry) []accessdata.Operator {
 	return []accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}
 }
-
-/*
-func Write(items []accessdata.Operator, data *accessdata.Entry, formatter accessdata.Formatter) {
-	var o O
-	var f accessdata.Formatter
-
-	if data == nil {
-		o.Write([]accessdata.Operator{{errorName, errorNilEntry}}, accessdata.NewEntry(),f)
-		return
-	}
-	if entry.IsIngress() {
-		if !opt.ingress {
-			return
-		}
-		if len(ingressOperators) == 0 {
-			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry(),f)
-			return
-		}
-		o.Write(ingressOperators, entry,f)
-	} else {
-		if !opt.egress {
-			return
-		}
-		if len(egressOperators) == 0 {
-			o.Write([]accessdata.Operator{{errorName, fmt.Sprintf(errorEmptyFmt, entry.Traffic)}}, accessdata.NewEntry(),f)
-			return
-		}
-		o.Write(egressOperators, entry,f)
-	}
-}
-
-*/

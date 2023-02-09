@@ -11,7 +11,7 @@ func Do(req *http.Request) (*http.Response, error) {
 }
 
 // DoClient - process a "client.Do" request with the given client. Also, check the req.Context to determine
-// if there is a "Do" proxy that should be invoked instead of the client request.
+// if there is a "Do" proxy that should be called instead.
 func DoClient(req *http.Request, client *http.Client) (*http.Response, error) {
 	if req == nil {
 		return nil, errors.New("request is nil") //NewStatus(StatusInvalidArgument, doLocation, errors.New("request is nil"))
@@ -19,7 +19,7 @@ func DoClient(req *http.Request, client *http.Client) (*http.Response, error) {
 	if client == nil {
 		return nil, errors.New("client is nil")
 	}
-	if IsContextDo(req.Context()) {
+	if IsContextDoInRequest(req) {
 		return ContextDo(req)
 	}
 	return client.Do(req)
