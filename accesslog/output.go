@@ -14,7 +14,7 @@ type OutputHandler interface {
 // NilOutputHandler - no output
 type NilOutputHandler struct{}
 
-func (NilOutputHandler) Write(items []accessdata.Operator, data *accessdata.Entry, formatter accessdata.Formatter) {
+func (NilOutputHandler) Write(_ []accessdata.Operator, _ *accessdata.Entry, _ accessdata.Formatter) {
 }
 
 // DebugOutputHandler - output to stdio
