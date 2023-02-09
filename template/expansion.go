@@ -15,6 +15,7 @@ type Resolver interface {
 	Lookup(name string) (string, error)
 }
 
+// Expand - templated function to expand a template string, utilizing a resolver
 func Expand[T Resolver](t string) (string, error) {
 	var r T
 

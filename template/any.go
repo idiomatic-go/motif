@@ -2,6 +2,17 @@ package template
 
 import "reflect"
 
+// IsNil - determine if the interface{} is nil, or if it holds a nil pointer
+func IsNil(a any) bool {
+	if a == nil {
+		return true
+	}
+	if reflect.TypeOf(a).Kind() != reflect.Pointer {
+		return false
+	}
+	return reflect.ValueOf(a).IsNil()
+}
+
 /*
 func IsNillable(a any) bool {
 	return IsPointer(a) || IsPointerType(a)
@@ -27,18 +38,5 @@ func IsPointerType(a any) bool {
 	}
 	return false
 }
-//if !IsNillable_T(a) {
-	//	return false
-	//}
-*/
 
-// IsNil - determine if the interface{} holds is nil
-func IsNil(a any) bool {
-	if a == nil {
-		return true
-	}
-	if reflect.TypeOf(a).Kind() != reflect.Pointer {
-		return false
-	}
-	return reflect.ValueOf(a).IsNil()
-}
+*/

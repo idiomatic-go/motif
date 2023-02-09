@@ -10,6 +10,7 @@ const (
 	delimiter = ":"
 )
 
+// ValidateConfig - validates a configuration map, iterating through all keys
 func ValidateConfig(m map[string]string, err error, keys ...string) (errs []error) {
 	if m == nil {
 		return []error{errors.New("config map is nil")}

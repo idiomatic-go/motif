@@ -8,6 +8,7 @@ const (
 	EnvVariableReference = "{env}"
 )
 
+// EnvExpansion - expand a template with an environment variable reference
 func EnvExpansion(s string) string {
 	index := strings.Index(s, EnvVariableReference)
 	if index == -1 {

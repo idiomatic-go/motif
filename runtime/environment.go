@@ -37,6 +37,7 @@ func matchEnvironment(env int) bool {
 	return false
 }
 
+// IsDevEnv - determine environment
 func IsDevEnv() bool {
 	return matchEnvironment(DevEnv)
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// HttpHostMetricsHandler - http handler that captures metrics about an ingress request, and logs an access
+// HttpHostMetricsHandler - http handler that captures metrics about an ingress request, also logs an access
 // entry
 func HttpHostMetricsHandler(appHandler http.Handler, msg string) http.Handler {
 	wrappedH := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

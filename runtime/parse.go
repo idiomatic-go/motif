@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+// ParseMap - create a map from a []byte
 func ParseMap(buf []byte) (map[string]string, error) {
 	m := make(map[string]string)
 	if len(buf) == 0 {

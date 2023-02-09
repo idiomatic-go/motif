@@ -7,16 +7,19 @@ import (
 	"sync"
 )
 
+// Entry - and entry in an EntryDirectory
 type Entry struct {
 	uri string
 	c   chan Message
 }
 
+// EntryDirectory - collection of Entry
 type EntryDirectory struct {
 	m  map[string]*Entry
 	mu sync.RWMutex
 }
 
+// NewEntryDirectory - create a new directory
 func NewEntryDirectory() *EntryDirectory {
 	return &EntryDirectory{m: make(map[string]*Entry)}
 }

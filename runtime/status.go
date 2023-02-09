@@ -45,10 +45,12 @@ const (
 	_maxGRPCCode             = StatusUnauthenticated
 )
 
+// IsErrors - determine if there are errors in an []error
 func IsErrors(errs []error) bool {
 	return !(len(errs) == 0 || (len(errs) == 1 && errs[0] == nil))
 }
 
+// Status - struct for status data
 type Status struct {
 	code      codes.Code
 	duration  time.Duration
@@ -59,6 +61,7 @@ type Status struct {
 	md        metadata.MD
 }
 
+// NewStatusCode - new Status from a code
 func NewStatusCode(code codes.Code) *Status {
 	s := new(Status)
 	s.code = code
@@ -67,10 +70,12 @@ func NewStatusCode(code codes.Code) *Status {
 	return s
 }
 
+// NewHttpStatusCode - new Status from a http status code
 func NewHttpStatusCode(code int) *Status {
 	return NewStatusCode(codes.Code(code))
 }
 
+// NewStatus - new Status from a code, location, and optional errors
 func NewStatus(code codes.Code, location string, errs ...error) *Status {
 	s := NewStatusCode(code)
 	s.location = location
@@ -88,6 +93,7 @@ func NewStatusWithContext(code codes.Code, location string, ctx context.Context,
 	return s
 }
 
+// NewHttpStatus - new Status from a http.Response, location, and optional errors
 func NewHttpStatus(resp *http.Response, location string, errs ...error) *Status {
 	var code codes.Code
 	if resp == nil {
@@ -104,6 +110,7 @@ func NewHttpStatus(resp *http.Response, location string, errs ...error) *Status 
 	return s
 }
 
+// NewStatusOK - new OK status
 func NewStatusOK() *Status {
 	return NewStatusCode(StatusOK)
 }
@@ -112,6 +119,7 @@ func NewStatusInvalidArgument(location string, err error) *Status {
 	return NewStatus(StatusInvalidArgument, location, err)
 }
 
+// NewStatusError - new Internal status with location and errors
 func NewStatusError(location string, errs ...error) *Status {
 	return NewStatus(StatusInternal, location, errs...)
 }

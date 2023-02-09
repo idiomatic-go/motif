@@ -8,11 +8,13 @@ import (
 	"sync"
 )
 
+// MessageCache - message cache by resource uri
 type MessageCache struct {
 	m  map[string]Message
 	mu sync.RWMutex
 }
 
+// NewMessageCache - create a message cache
 func NewMessageCache() *MessageCache {
 	return &MessageCache{m: make(map[string]Message)}
 }

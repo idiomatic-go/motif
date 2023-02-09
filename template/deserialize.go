@@ -9,7 +9,7 @@ import (
 
 var deserializeLoc = pkgPath + "/deserialize"
 
-// Deserialize - provide deserialization of a request/response body
+// Deserialize - templated function, providing deserialization of a request/response body
 func Deserialize[E ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
 	var e E
 	var t T

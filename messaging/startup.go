@@ -31,11 +31,12 @@ func registerResourceUnchecked(uri string, c chan Message) error {
 	return nil
 }
 
-// Shutdown - virtual host shutdown
+// Shutdown - resource shutdown
 func Shutdown() {
 	directory.Shutdown()
 }
 
+// Startup - templated function to processing startup for all registered resources.
 func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
 	var e E
 	var failures []string

@@ -13,8 +13,10 @@ const (
 	HostName      = "host"
 )
 
+// MessageHandler - function type to process a Message
 type MessageHandler func(msg Message)
 
+// Message - message data
 type Message struct {
 	To      string
 	From    string
@@ -24,6 +26,7 @@ type Message struct {
 	ReplyTo MessageHandler
 }
 
+// ReplyTo - function used by message recipient to reply with a runtime.Status
 func ReplyTo(msg Message, status *runtime.Status) {
 	if msg.ReplyTo == nil {
 		return
@@ -38,6 +41,7 @@ func ReplyTo(msg Message, status *runtime.Status) {
 	})
 }
 
+// NewMessageCacheHandler - handler to receive messages into a cache.
 func NewMessageCacheHandler(cache *MessageCache) MessageHandler {
 	return func(msg Message) {
 		cache.Add(msg)

@@ -11,7 +11,7 @@ type wrapper struct {
 	rt http.RoundTripper
 }
 
-// RoundTrip - implementation of the RoundTrip interface for a transport, and also logs an access entry
+// RoundTrip - implementation of the RoundTrip interface for a transport, also logs an access entry
 func (w *wrapper) RoundTrip(req *http.Request) (*http.Response, error) {
 	var start = time.Now().UTC()
 

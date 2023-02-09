@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// OutputHandler - interface output selection
 type OutputHandler interface {
 	Write(s string)
 }
