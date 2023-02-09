@@ -3,11 +3,15 @@ package httptest
 import (
 	"bufio"
 	"bytes"
+	"embed"
 	"io"
 	"io/fs"
 	"net/http"
 	"strings"
 )
+
+//go:embed resource/*
+var fsys embed.FS
 
 // NewResponse - create a new response from the provided parameters
 func NewResponse(httpStatus int, content []byte, kv ...string) *http.Response {
@@ -34,6 +38,11 @@ func ReadResponse(f fs.FS, name string) (*http.Response, error) {
 		return nil, err0
 	}
 	return resp, nil
+}
+
+// ReadResponseTest - only used for calls scoped to the enclosing http package, specifically from do_test.go.
+func ReadResponseTest(name string) (*http.Response, error) {
+	return ReadResponse(fsys, name)
 }
 
 // NewIOErrorResponse - create a respons that contains a body that will generate an I/O error when read

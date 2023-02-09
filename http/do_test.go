@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/idiomatic-go/motif/http/httptest"
 	"io"
@@ -9,21 +10,37 @@ import (
 )
 
 const (
-	httpContent = "proxy://www.somestupidname.come"
+	helloWorldUri         = "proxy://www.somestupidname.come"
+	serviceUnavailableUri = "http://www.unavailable.com"
+	http503FileName       = "resource/http/http-503.txt"
 )
 
 var doCtx = ContextWithDo(context.Background(), doProxy)
 
+//
+// When reading http from a text file, be sure you have the expected blank line between header and body.
+// If there is not a blank line after the header section, even if there is not a body, you will receive an
+// Unexpected EOF error when calling the golang http.ReadResponse function.
+//
+
 func doProxy(req *http.Request) (*http.Response, error) {
 	if req == nil || req.URL == nil {
-		return nil, nil
+		return nil, errors.New("request or request URL is nil")
 	}
 	switch httptest.Pattern(req) {
 	case httptest.HttpErrorUri, httptest.BodyIOErrorUri:
 		return httptest.ErrorProxy(req)
-	case httpContent:
+	case helloWorldUri:
 		resp := httptest.NewResponse(http.StatusOK, []byte("<html><body><h1>Hello, World</h1></body></html>"), "content-type", "text/html", "content-length", "1234")
 		return resp, nil
+	case serviceUnavailableUri:
+		// Read the response from an embedded file system.
+		//
+		// ReadResponseTest(name string)  is only used for calls from do_test.go. When calling from other test
+		// files, use the ReadResponse(f fs.FS, name string)
+		//
+		resp, err := httptest.ReadResponseTest(http503FileName)
+		return resp, err
 	default:
 		fmt.Printf("test: doProxy(req) : unmatched pattern %v", httptest.Pattern(req))
 	}
@@ -44,20 +61,20 @@ func ExampleDo_InvalidArgument() {
 
 }
 
-func ExampleDo_HttpError() {
+func ExampleDo_Proxy_HttpError() {
 	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, httptest.HttpErrorUri, nil)
-	resp, status := Do(req)
-	fmt.Printf("test: Do(req) -> [%v] [response:%v]\n", status, resp)
+	resp, err := Do(req)
+	fmt.Printf("test: Do(req) -> [%v] [response:%v]\n", err, resp)
 
 	//Output:
 	//test: Do(req) -> [http: connection has been hijacked] [response:<nil>]
 
 }
 
-func ExampleDo_IOError() {
+func ExampleDo_Proxy_IOError() {
 	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, httptest.BodyIOErrorUri, nil)
-	resp, status := Do(req)
-	fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [body:%v]\n", status, resp != nil, resp.StatusCode, resp.Body != nil)
+	resp, err := Do(req)
+	fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [body:%v]\n", err, resp != nil, resp.StatusCode, resp.Body != nil)
 
 	defer resp.Body.Close()
 	buf, s2 := io.ReadAll(resp.Body)
@@ -69,11 +86,11 @@ func ExampleDo_IOError() {
 
 }
 
-func ExampleDo_Content() {
-	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, httpContent, nil)
-	resp, status := Do(req)
+func ExampleDo_Proxy_HellowWorld() {
+	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, helloWorldUri, nil)
+	resp, err := Do(req)
 	fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [content-type:%v] [content-length:%v] [body:%v]\n",
-		status, resp != nil, resp.StatusCode, resp.Header.Get("content-type"), resp.Header.Get("content-length"), resp.Body != nil)
+		err, resp != nil, resp.StatusCode, resp.Header.Get("content-type"), resp.Header.Get("content-length"), resp.Body != nil)
 
 	defer resp.Body.Close()
 	buf, ioError := io.ReadAll(resp.Body)
@@ -82,5 +99,23 @@ func ExampleDo_Content() {
 	//Output:
 	//test: Do(req) -> [<nil>] [resp:true] [statusCode:200] [content-type:text/html] [content-length:1234] [body:true]
 	//test: io.ReadAll(resp.Body) -> [err:<nil>] [body:<html><body><h1>Hello, World</h1></body></html>]
+
+}
+
+func ExampleDo_Proxy_ServiceUnavailable() {
+	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, serviceUnavailableUri, nil)
+	resp, err := Do(req)
+	if err != nil {
+		fmt.Printf("test: Do(req) -> %v\n", err)
+	} else {
+		fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [content-type:%v] [body:%v]\n",
+			err, resp != nil, resp.StatusCode, resp.Header.Get("content-type"), resp.Body != nil)
+	}
+	//defer resp.Body.Close()
+	//buf, ioError := io.ReadAll(resp.Body)
+	//fmt.Printf("test: io.ReadAll(resp.Body) -> [err:%v] [body:%v]\n", ioError, string(buf))
+
+	//Output:
+	//test: Do(req) -> [<nil>] [resp:true] [statusCode:503] [content-type:text/html] [body:true]
 
 }

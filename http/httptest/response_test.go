@@ -1,13 +1,9 @@
 package httptest
 
 import (
-	"embed"
 	"fmt"
 	"io"
 )
-
-//go:embed resource/*
-var fsys embed.FS
 
 func ExampleHtmlResponse() {
 	resp, err0 := ReadResponse(fsys, "resource/http/html-response.html")
