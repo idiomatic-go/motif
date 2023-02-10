@@ -9,7 +9,7 @@ With the release of Go generics, a new paradigm has emerged: [templates][tutoria
 
 ## accessdata 
 
-Package [accessdata][accessdatapkg] provides the Entry type, which contains all of the data needed for access logging. Also provided are functions and types that define command operators which 
+[Accessdata][accessdatapkg] provides the Entry type, which contains all of the data needed for access logging. Also provided are functions and types that define command operators which 
 allow the extraction and formatting of Entry data. The formatting of Entry data is implemented as a template parameter: 
 ~~~
 // Formatter - template parameter for formatting
@@ -37,16 +37,29 @@ func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 ~~~
 
 ## http
+[Http][httppkg]
 
 ## messaging
+[Messaging][messagingpkg]
 
 ## middleware
+[Middleware][middlewarepkg]
 
 ## runtime
+[Runtime][runtimepkg]
 
 ## template
+[Template][templatepkg]
+
 [emuller]: <https://www.youtube.com/watch?v=ltqV6pDKZD8>
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
-[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/postgresql/pgxsql>
+[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accessdata>
+[accesslogpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accesslog>
+[httppkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/http>
+[messagingpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/messaging>
+[middlewarepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/middleware>
+[runtimepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/runtime>
+[templatepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/template>
+[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accessdata>
