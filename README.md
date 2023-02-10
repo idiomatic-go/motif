@@ -78,7 +78,8 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 available allow configuring a logging function.
 
 ## runtime
-[Runtime][runtimepkg]
+[Runtime][runtimepkg] implements environment, configuration, and status types. The status type is used extensively as a function return value, and provides error,
+http, and gRPC status codes.
 
 ## template
 [Template][templatepkg]
