@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-// OutputHandler - template parameter interface output selection
+// OutputHandler - template parameter output handler interface
 type OutputHandler interface {
 	Write(s string)
 }

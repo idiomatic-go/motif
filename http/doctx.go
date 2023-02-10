@@ -33,7 +33,7 @@ func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
 	if fn == nil {
 		return ctx
 	}
-	return &doContext{ctx, doContextKey, fn} //context.WithValue(ctx, doContextKey, fn)
+	return &doContext{ctx, doContextKey, fn}
 }
 
 // ContextDo - call the DoProxy contained in the req.Context
