@@ -9,7 +9,7 @@ With the release of Go generics, a new paradigm has emerged: [templates][tutoria
 
 ## accessdata
 
-Accessdata provides the Entry type, which contains all of the data needed for access logging.
+Provides the Entry type, which contains all of the data needed for access logging.
 ~~~
 // Entry - struct for all access logging data
 type Entry struct {
@@ -34,7 +34,6 @@ type Entry struct {
 	BytesReceived int64 // handler response content length
 	StatusFlags   string
 }
-
 ~~~
 Also provided are functions and types that define command operators which allow the extraction and formatting of Entry data. The formatting of Entry data is implemented as a template parameter: 
 ~~~
@@ -42,9 +41,26 @@ Also provided are functions and types that define command operators which allow 
 type Formatter interface {
 	Format(items []Operator, data *Entry) string
 }
+~~~
+Configurable items, specific to a package, are defined in an options.go file.
 
+## accesslog
+
+Encompasses access logging functionality. Seperate operators, and runtime initialization of those operators, are provided for ingress and egress traffic. An 
+output template parameter allows redirection of the access logging: 
+~~~
+// OutputHandler - template parameter for log output
+type OutputHandler interface {
+	Write(items []accessdata.Operator, data *accessdata.Entry, formatter accessdata.Formatter)
+}
 ~~~
 
+The log function is a templated function, allowing for selection of output and formatting:
+~~~
+func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
+    // implementation details
+}
+~~~
 [emuller]: <https://www.youtube.com/watch?v=ltqV6pDKZD8>
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
