@@ -4,7 +4,7 @@ Motif was inspired by the challenges of developing Go applications. Determining 
 [Robert Griesemer - The Evolution of Go][rgriesemer] also presents an important analogy between Go packages and LEGO® bricks. Reviewing the Go standard
 library packaging structure provides a blueprint for an application architecture, and underscores how essential package design is for idiomatic Go. 
 
-With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint].
+With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are the foundation of generic programming, and have been available in  C++ since 1991. I use the term templates over generics, as templates are a paradigm, and generics connotes a language implementation.  
 
 
 
