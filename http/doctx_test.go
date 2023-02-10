@@ -22,7 +22,7 @@ func ExampleContextWithDoExisting() {
 	//Output:
 	//test: ContextWithDo(context.Background(),doDocxtProxy) -> [ctxDo:true] [newCtx:true]
 	//test: ContextWithDo(ctx,doDocxtProxy) -> [ctxDo:true] [newCtx:false]
-	
+
 }
 
 func ExampleContextWithDo() {

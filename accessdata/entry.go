@@ -31,7 +31,7 @@ type Origin struct {
 	InstanceId string
 }
 
-// Entry - struct for all access logging information
+// Entry - struct for all access logging data
 type Entry struct {
 	Traffic  string
 	Start    time.Time
@@ -50,8 +50,8 @@ type Entry struct {
 
 	// Response
 	StatusCode    int
-	BytesSent     int64 // ingress response
-	BytesReceived int64 // handler response content length
+	BytesSent     int64
+	BytesReceived int64
 	StatusFlags   string
 }
 
