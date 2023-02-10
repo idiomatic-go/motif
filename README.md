@@ -7,9 +7,9 @@ library packaging structure provides a blueprint for an application architecture
 With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. I prefer the term templates over generics, as templates are a paradigm, and generics connotes a class of implementations. What follows is a description of the packages in Motif, highlighting specific patterns and template implementations.  
 
 
-## accessdata   [pkg.go.dev][accessdata]
+## accessdata 
 
-Provides the Entry type, which contains all of the data needed for access logging. Also provided are functions and types that define command operators which 
+Package [accessdata][accessdatapkg] provides the Entry type, which contains all of the data needed for access logging. Also provided are functions and types that define command operators which 
 allow the extraction and formatting of Entry data. The formatting of Entry data is implemented as a template parameter: 
 ~~~
 // Formatter - template parameter for formatting
@@ -49,4 +49,4 @@ func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
-[accessdata]: <https://pkg.go.dev/github.com/idiomatic-go/postgresql/pgxsql>
+[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/postgresql/pgxsql>
