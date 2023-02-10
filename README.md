@@ -59,7 +59,19 @@ func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
 ~~~
 
 ## messaging
-[Messaging][messagingpkg]
+[Messaging][messagingpkg] provides a way for a hosting process to communicate with packages. Packages that register themselves can then be started and pinged by the 
+host via the templated functions:
+~~~
+// Ping - templated function to "ping" a registered resource
+func Ping[E template.ErrorHandler](ctx context.Context, uri string) (status *runtime.Status) {
+    // Implementation details
+}
+
+// Startup - templated function to startup all registered resources.
+func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
+    // Implementation details
+}
+~~~
 
 ## middleware
 [Middleware][middlewarepkg]
