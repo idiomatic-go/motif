@@ -74,7 +74,8 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 ~~~
 
 ## middleware
-[Middleware][middlewarepkg]
+[Middleware][middlewarepkg] provides implementations of a http.Handler and http.RoundTripper that support ingress and egress logging. Options
+available allow configuring a logging function.
 
 ## runtime
 [Runtime][runtimepkg]
