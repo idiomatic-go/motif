@@ -36,7 +36,27 @@ func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 ~~~
 
 ## http
-[Http][httppkg] introduces a new design pattern for testing http.Client.Do calls: Do
+[Http][httppkg] introduces a new design pattern for testing http.Client.Do() calls: DoProxy. A DoProxy is added to a context.Context, and all client requests
+are proxied,
+~~~
+// DoProxy - Http client.Do proxy type
+type DoProxy func(req *http.Request) (*http.Response, error)
+
+// ContextWithDo - DoProxy context creation
+func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	} else {
+		if IsContextDo(ctx) {
+			return ctx
+		}
+	}
+	if fn == nil {
+		return ctx
+	}
+	return &doContext{ctx, doContextKey, fn} 
+}
+~~~
 
 ## messaging
 [Messaging][messagingpkg]
