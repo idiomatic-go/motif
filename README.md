@@ -21,8 +21,7 @@ Configurable items, specific to a package, are defined in an options.go file.
 
 ## accesslog
 
-Encompasses access logging functionality. Seperate operators, and runtime initialization of those operators, are provided for ingress and egress traffic. An 
-output template parameter allows redirection of the access logging: 
+[Accesslog][accesslogpkg] encompasses access logging functionality. Seperate operators, and runtime initialization of those operators, are provided for ingress and egress traffic. An output template parameter allows redirection of the access logging: 
 ~~~
 // OutputHandler - template parameter for log output
 type OutputHandler interface {
@@ -37,7 +36,7 @@ func Log[O OutputHandler, F accessdata.Formatter](entry *accessdata.Entry) {
 ~~~
 
 ## http
-[Http][httppkg]
+[Http][httppkg] introduces a new design pattern for testing http.Client.Do calls: Do
 
 ## messaging
 [Messaging][messagingpkg]
