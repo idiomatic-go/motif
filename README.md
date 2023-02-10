@@ -82,7 +82,38 @@ available allow configuring a logging function.
 http, and gRPC status codes.
 
 ## template
-[Template][templatepkg]
+[Template][templatepkg] contains template functions for http.Request and http.Response body deserialization, and string expansion:
+~~~
+// Deserialize - templated function, providing deserialization of a request/response body
+func Deserialize[E ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
+    // Implementation details
+}
+    
+ // Resolver - template parameter name value lookup
+type Resolver interface {
+	Lookup(name string) (string, error)
+}
+
+// Expand - templated function to expand a template string, utilizing a resolver
+func Expand[T Resolver](t string) (string, error) {   
+   // Implementation details
+}
+~~~
+
+Template parameters for output and error handling are also included:
+~~~
+// ErrorHandler - template parameter error handler interface
+type ErrorHandler interface {
+	Handle(location string, errs ...error) *runtime.Status
+	HandleWithContext(ctx context.Context, location string, errs ...error) *runtime.Status
+	HandleStatus(s *runtime.Status) *runtime.Status
+}
+
+// OutputHandler - template parameter output handler interface
+type OutputHandler interface {
+	Write(s string)
+}
+~~~
 
 [emuller]: <https://www.youtube.com/watch?v=ltqV6pDKZD8>
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
