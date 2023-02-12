@@ -20,9 +20,9 @@ const (
 	DurationOperator       = "%DURATION%"     // Total duration in milliseconds of the request from the start time to the last byte out.
 	DurationStringOperator = "%DURATION_STR%" // Time package formatted
 
-	OriginRegionOperator = "%REGION%" // origin region
-	OriginZoneOperator   = "%ZONE%"   // origin zone
-	//OriginSubZoneOperator    = "%SUB_ZONE%"    // origin sub zone
+	OriginRegionOperator     = "%REGION%"      // origin region
+	OriginZoneOperator       = "%ZONE%"        // origin zone
+	OriginSubZoneOperator    = "%SUB_ZONE%"    // origin sub zone
 	OriginServiceOperator    = "%SERVICE%"     // origin service
 	OriginInstanceIdOperator = "%INSTANCE_ID%" // origin instance id
 
@@ -109,9 +109,9 @@ var Operators = map[string]*Operator{
 	DurationOperator:       {"duration_ms", DurationOperator},
 	DurationStringOperator: {"duration", DurationStringOperator},
 
-	OriginRegionOperator: {"region", OriginRegionOperator},
-	OriginZoneOperator:   {"zone", OriginZoneOperator},
-	//OriginSubZoneOperator:    {"sub_zone", OriginSubZoneOperator},
+	OriginRegionOperator:     {"region", OriginRegionOperator},
+	OriginZoneOperator:       {"zone", OriginZoneOperator},
+	OriginSubZoneOperator:    {"sub_zone", OriginSubZoneOperator},
 	OriginServiceOperator:    {"service", OriginServiceOperator},
 	OriginInstanceIdOperator: {"instance_id", OriginInstanceIdOperator},
 

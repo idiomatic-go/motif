@@ -27,6 +27,7 @@ const (
 type Origin struct {
 	Region     string
 	Zone       string
+	SubZone    string
 	Service    string
 	InstanceId string
 }
