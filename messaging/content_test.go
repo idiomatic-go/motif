@@ -19,7 +19,7 @@ var msgTest = Message{To: "to-uri", From: "from-uri", Content: []any{
 	errors.New("this is a content error message"),
 	func() bool { return false },
 	runtime.NewStatusError("location", errors.New("error message")).SetDuration(time.Second * 2),
-	ActuatorApply(func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (ActuatorComplete, context.Context, bool) {
+	ActuatorApply(func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (func(), context.Context, bool) {
 		return func() {}, ctx, false
 	}),
 	template.NewErrorStatusHandleFn[template.DebugError](),

@@ -17,10 +17,7 @@ type DatabaseUrl struct {
 }
 
 // ActuatorApply - type for applying an actuator
-type ActuatorApply func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (fn ActuatorComplete, newCtx context.Context, rateLimited bool)
-
-// ActuatorComplete - return value from a call to ActuatorApply
-type ActuatorComplete func()
+type ActuatorApply func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (fn func(), newCtx context.Context, rateLimited bool)
 
 // AccessCredentials - access function for Credentials in a message
 func AccessCredentials(msg *Message) Credentials {
