@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"errors"
-	"github.com/idiomatic-go/motif/accessdata"
 	"net/http"
 	"time"
 )
@@ -23,7 +22,7 @@ func (w *wrapper) RoundTrip(req *http.Request) (*http.Response, error) {
 	if err != nil {
 		return resp, err
 	}
-	logFn(accessdata.NewHttpEgressEntry(start, time.Since(start), nil, req, resp, ""))
+	logFn("egress", start, time.Since(start), req, resp)
 	return resp, nil
 }
 

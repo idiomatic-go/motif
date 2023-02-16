@@ -2,18 +2,32 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/idiomatic-go/motif/accessdata"
+	"net/http"
+	"time"
 )
 
+// HttpLog - type for http logging
+type HttpLog func(traffic string, start time.Time, duration time.Duration, req *http.Request, resp *http.Response)
+
 // SetLogFn - allows setting an application configured logging function
-func SetLogFn(fn accessdata.Accessor) {
+func SetLogFn(fn HttpLog) {
 	if fn != nil {
 		logFn = fn
 	}
 }
 
-var logFn = defaultLog
+var logFn = defaultLogFn
 
-var defaultLog accessdata.Accessor = func(entry *accessdata.Entry) {
-	fmt.Printf("{%v}\n", entry)
+var defaultLogFn HttpLog = func(traffic string, start time.Time, duration time.Duration, req *http.Request, resp *http.Response) {
+	s := fmt.Sprintf("start:%v ,"+
+		"duration:%v ,"+
+		"traffic:%v, "+
+		"status-code:%v, "+
+		"method:%v, "+
+		"url:%v, "+
+		"host:%v, "+
+		"path:%v, "+
+		"bytes:%v",
+		start, duration, traffic, resp.StatusCode, req.Method, req.URL.String(), req.Host, req.URL.Path, resp.ContentLength)
+	fmt.Printf("%v\n", s)
 }

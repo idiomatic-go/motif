@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"github.com/felixge/httpsnoop"
-	"github.com/idiomatic-go/motif/accessdata"
 	"net/http"
 	"time"
 )
@@ -14,7 +13,10 @@ func HttpHostMetricsHandler(appHandler http.Handler, msg string) http.Handler {
 		start := time.Now().UTC()
 		m := httpsnoop.CaptureMetrics(appHandler, w, r)
 		//log.Printf("%s %s (code=%d dt=%s written=%d)", r.Method, r.URL, m.Code, m.Duration, m.Written)
-		logFn(accessdata.NewHttpIngressEntry(start, time.Since(start), nil, r, m.Code, m.Written, ""))
+		resp := new(http.Response)
+		resp.StatusCode = m.Code
+		resp.ContentLength = m.Written
+		logFn("ingress", start, time.Since(start), r, resp)
 	})
 	return wrappedH
 }

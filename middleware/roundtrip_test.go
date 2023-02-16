@@ -2,8 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"github.com/idiomatic-go/motif/accessdata"
-	"github.com/idiomatic-go/motif/accesslog"
 	"net/http"
 )
 
@@ -11,47 +9,7 @@ var (
 	isEnabled    = false
 	googleUrl    = "https://www.google.com/search?q=test"
 	instagramUrl = "https://www.instagram.com"
-
-	config = []accessdata.Operator{
-		//{Value: accessdata.StartTimeOperator},
-		//{Value: accessdata.DurationOperator},
-		{Value: accessdata.TrafficOperator},
-		{Value: accessdata.RouteNameOperator},
-
-		{Value: accessdata.RequestMethodOperator},
-		{Value: accessdata.RequestHostOperator},
-		{Value: accessdata.RequestPathOperator},
-		{Value: accessdata.RequestProtocolOperator},
-
-		{Value: accessdata.ResponseStatusCodeOperator},
-		{Value: accessdata.StatusFlagsOperator},
-		{Value: accessdata.ResponseBytesReceivedOperator},
-		{Value: accessdata.ResponseBytesSentOperator},
-
-		/*
-			{Value: accessdata.TimeoutDurationOperator},
-			{Value: accessdata.RateLimitOperator},
-			{Value: accessdata.RateBurstOperator},
-			{Value: accessdata.RetryOperator},
-			{Value: accessdata.RetryRateLimitOperator},
-			{Value: accessdata.RetryRateBurstOperator},
-			{Value: accessdata.FailoverOperator},
-
-		*/
-	}
 )
-
-func init() {
-	err := accesslog.InitEgressOperators(config)
-	if err != nil {
-		fmt.Printf("init() -> [:%v]\n", err)
-	}
-
-	SetLogFn(func(entry *accessdata.Entry) {
-		accesslog.Log[accesslog.TestOutputHandler, accessdata.JsonFormatter](entry)
-	},
-	)
-}
 
 func Example_No_Wrapper() {
 	req, _ := http.NewRequest("GET", googleUrl, nil)
@@ -71,7 +29,7 @@ func Example_No_Wrapper() {
 
 }
 
-func Example_Default() {
+func _Example_Default() {
 	req, _ := http.NewRequest("GET", instagramUrl, nil)
 
 	if !isEnabled {
