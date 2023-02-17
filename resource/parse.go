@@ -1,4 +1,4 @@
-package runtime
+package resource
 
 import (
 	"bufio"
@@ -6,6 +6,11 @@ import (
 	"fmt"
 	"io"
 	"strings"
+)
+
+const (
+	comment   = "//"
+	delimiter = ":"
 )
 
 // ParseMap - create a map from a []byte

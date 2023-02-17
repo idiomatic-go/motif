@@ -1,4 +1,4 @@
-package middleware
+package http
 
 import (
 	"github.com/idiomatic-go/motif/runtime"

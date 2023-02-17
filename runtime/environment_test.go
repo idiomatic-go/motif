@@ -76,3 +76,22 @@ func ExampleTestEnv() {
 
 
 */
+
+func ExampleExpand() {
+	runtime.SetRuntimeEnv("dev")
+
+	t := "file_{env}.txt"
+	fmt.Printf("test: EnvExpansion(%v) -> %v\n", t, runtime.EnvExpansion(t))
+
+	runtime.SetRuntimeEnv("prod")
+	fmt.Printf("test: EnvExpansion(%v) -> %v\n", t, runtime.EnvExpansion(t))
+
+	t = "file_{env_var_invalid}.txt"
+	fmt.Printf("test: EnvExpansion(%v) -> %v\n", t, runtime.EnvExpansion(t))
+
+	// Output:
+	//test: EnvExpansion(file_{env}.txt) -> file_dev.txt
+	//test: EnvExpansion(file_{env}.txt) -> file_prod.txt
+	//test: EnvExpansion(file_{env_var_invalid}.txt) -> invalid or missing environment variable reference: {env}
+
+}

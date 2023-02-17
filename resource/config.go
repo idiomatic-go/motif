@@ -1,13 +1,8 @@
-package runtime
+package resource
 
 import (
 	"errors"
 	"fmt"
-)
-
-const (
-	comment   = "//"
-	delimiter = ":"
 )
 
 // ValidateConfig - validates a configuration map, iterating through all keys
