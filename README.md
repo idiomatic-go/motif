@@ -53,12 +53,11 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 }
 ~~~
 
-## middleware
-[Middleware][middlewarepkg] provides implementations of a http.Handler and http.RoundTripper that support ingress and egress logging. Options
-available allow configuring a logging function.
+## resource
+[Resource][resourcepkg] implements configuration map deserialization and validation.
 
 ## runtime
-[Runtime][runtimepkg] implements environment, configuration, and status types. The status type is used extensively as a function return value, and provides error,
+[Runtime][runtimepkg] implements environment, request context, and status types. The status type is used extensively as a function return value, and provides error,
 http, and gRPC status codes.
 
 ## template
@@ -99,11 +98,9 @@ type OutputHandler interface {
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
-[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accessdata>
-[accesslogpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accesslog>
 [httppkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/http>
 [messagingpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/messaging>
-[middlewarepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/middleware>
+[resourcepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/resource>
 [runtimepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/runtime>
 [templatepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/template>
-[accessdatapkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/accessdata>
+
