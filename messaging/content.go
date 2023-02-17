@@ -19,7 +19,7 @@ type DatabaseUrl struct {
 // ActuatorApply - type for applying an actuator
 type ActuatorApply func(ctx context.Context, statusCode func() int, uri, requestId, method string) (fn func(), newCtx context.Context, rateLimited bool)
 
-func NewStatusCodeFn(status **runtime.Status) func() int {
+func NewStatusCode(status **runtime.Status) func() int {
 	return func() int {
 		return int((*(status)).Code())
 	}

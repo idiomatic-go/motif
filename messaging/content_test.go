@@ -64,11 +64,11 @@ func ExampleAccessActuatorApply() {
 func ExampleNewStatusCodeFny() {
 	var status *runtime.Status
 
-	fn := NewStatusCodeFn(&status)
+	fn := NewStatusCode(&status)
 	status = runtime.NewStatusCode(runtime.StatusDeadlineExceeded)
-	fmt.Printf("test: NewStatusCodeFn(&status) -> [statusCode:%v]\n", fn())
+	fmt.Printf("test: NewStatusCode(&status) -> [statusCode:%v]\n", fn())
 
 	//Output:
-	//test: NewStatusCodeFn(&status) -> [statusCode:4]
+	//test: NewStatusCode(&status) -> [statusCode:4]
 
 }
