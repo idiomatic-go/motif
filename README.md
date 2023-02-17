@@ -10,7 +10,9 @@ Package dependencies also need to be obsessively managed. Rob Pike lists an impo
 	    is some deficiency in the basic design — you didn't really hit the right design point. Instead of adding an option, think 
 	    about what was forcing you to add that option.
 
-With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. I use the term templates over generics, as templates are a paradigm, and generics connotes a class of implementations. What follows is a description of the packages in Motif, highlighting specific patterns and template implementations.  
+With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. I use the term templates over generics, as templates are a paradigm, and generics connotes a class of implementations. Templates in C++ also support value parameters, which if implemented in Go, would allow passing a function as a template parameter. This functionality would allow further customization of templated code.
+
+What follows is a description of the packages in Motif, highlighting specific patterns and template implementations.  
 
 
 
