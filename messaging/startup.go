@@ -36,7 +36,7 @@ func Shutdown() {
 	directory.Shutdown()
 }
 
-// Startup - templated function to startup all registered resources.
+// Startup - templated function to start all registered resources.
 func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
 	var e E
 	var failures []string

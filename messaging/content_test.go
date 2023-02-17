@@ -19,7 +19,7 @@ var msgTest = Message{To: "to-uri", From: "from-uri", Content: []any{
 	errors.New("this is a content error message"),
 	func() bool { return false },
 	runtime.NewStatusError("location", errors.New("error message")).SetDuration(time.Second * 2),
-	ActuatorApply(func(ctx context.Context, status **runtime.Status, uri, requestId, method string) (func(), context.Context, bool) {
+	ActuatorApply(func(ctx context.Context, statusCode func() int, uri, requestId, method string) (func(), context.Context, bool) {
 		return func() {}, ctx, false
 	}),
 	template.NewErrorStatusHandleFn[template.DebugError](),
@@ -58,5 +58,17 @@ func ExampleAccessActuatorApply() {
 	//test: AccessActuatorApply(nil) -> [valid:false]
 	//test: AccessActuatorApply(msg) -> [valid:false]
 	//test: AccessActuatorApply(msg) -> [valid:true]
+
+}
+
+func ExampleNewStatusCodeFny() {
+	var status *runtime.Status
+
+	fn := NewStatusCodeFn(&status)
+	status = runtime.NewStatusCode(runtime.StatusDeadlineExceeded)
+	fmt.Printf("test: NewStatusCodeFn(&status) -> [statusCode:%v]\n", fn())
+
+	//Output:
+	//test: NewStatusCodeFn(&status) -> [statusCode:4]
 
 }
