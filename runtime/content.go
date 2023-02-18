@@ -13,7 +13,7 @@ const (
 )
 
 func GetContentLocation(req *http.Request) string {
-	if req != nil {
+	if req != nil && req.Header != nil {
 		return req.Header.Get(ContentLocation)
 	}
 	return ""
