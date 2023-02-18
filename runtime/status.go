@@ -176,19 +176,20 @@ func (s *Status) RequestId() string {
 	return s.requestId
 }
 
-func (s *Status) SetMetadata(kv ...string) {
+func (s *Status) SetMetadata(kv ...string) *Status {
 	if len(kv)%2 == 1 {
-		return //panic(fmt.Sprintf("metadata: Pairs got the odd number of input pairs for metadata: %d", len(kv)))
+		return s //panic(fmt.Sprintf("metadata: Pairs got the odd number of input pairs for metadata: %d", len(kv)))
 	}
 	for i := 0; i < len(kv); i += 2 {
 		key := strings.ToLower(kv[i])
 		s.md[key] = append(s.md[key], kv[i+1])
 	}
+	return s
 }
 
-func (s *Status) SetMetadataFromResponse(resp *http.Response, keys ...string) {
+func (s *Status) SetMetadataFromResponse(resp *http.Response, keys ...string) *Status {
 	if resp == nil || resp.Header == nil {
-		return
+		return s
 	}
 	for _, key := range keys {
 		if key == "" {
@@ -199,11 +200,12 @@ func (s *Status) SetMetadataFromResponse(resp *http.Response, keys ...string) {
 			s.md.Append(key, vals...)
 		}
 	}
+	return s
 }
 
-func (s *Status) AddMetadata(h http.Header, keys ...string) {
+func (s *Status) AddMetadata(h http.Header, keys ...string) *Status {
 	if h == nil {
-		return
+		return s
 	}
 	for _, key := range keys {
 		if key == "" {
@@ -215,6 +217,7 @@ func (s *Status) AddMetadata(h http.Header, keys ...string) {
 			}
 		}
 	}
+	return s
 }
 
 func (s *Status) IsContent() bool { return s.content != nil }
