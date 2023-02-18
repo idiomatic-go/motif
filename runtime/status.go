@@ -13,10 +13,7 @@ import (
 // https://grpc.github.io/grpc/core/md_doc_statuscodes.html
 
 const (
-	ContentType     = "Content-Type"
-	ContentTypeText = "text/plain" // charset=utf-8
-	ContentTypeJson = "application/json"
-	NilDuration     = time.Duration(-1)
+	NilDuration = time.Duration(-1)
 )
 
 const (
