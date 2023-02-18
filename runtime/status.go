@@ -177,12 +177,13 @@ func (s *Status) RequestId() string {
 }
 
 func (s *Status) SetMetadata(kv ...string) *Status {
-	if len(kv)%2 == 1 {
-		return s //panic(fmt.Sprintf("metadata: Pairs got the odd number of input pairs for metadata: %d", len(kv)))
-	}
 	for i := 0; i < len(kv); i += 2 {
 		key := strings.ToLower(kv[i])
-		s.md[key] = append(s.md[key], kv[i+1])
+		if i+1 >= len(kv) {
+			s.md[key] = append(s.md[key], "")
+		} else {
+			s.md[key] = append(s.md[key], kv[i+1])
+		}
 	}
 	return s
 }

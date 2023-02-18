@@ -40,7 +40,7 @@ func ExampleStatus_Http() {
 func ExampleStatus_SetMetadata() {
 	s := NewStatusOK()
 
-	s.SetMetadata("content-type", "text/plain")
+	s.SetMetadata("content-type", "text/plain", "content-length")
 	fmt.Printf("test: SetMetadata() -> %v\n", s.md)
 
 	s = NewStatusOK()
@@ -52,7 +52,7 @@ func ExampleStatus_SetMetadata() {
 	fmt.Printf("test: SetMetadata() -> %v\n", s.md)
 
 	//Output:
-	//test: SetMetadata() -> map[content-type:[text/plain]]
+	//test: SetMetadata() -> map[content-length:[] content-type:[text/plain]]
 	//test: SetMetadata() -> map[content-length:[1234] host:[www.google.com]]
 
 }
