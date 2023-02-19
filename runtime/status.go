@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -173,6 +174,14 @@ func (s *Status) RequestId() string {
 	return s.requestId
 }
 
+func (s *Status) MetadataValue(key string) string {
+	items := s.md.Get(key)
+	if len(items) > 0 {
+		return items[0]
+	}
+	return ""
+}
+
 func (s *Status) SetMetadata(kv ...string) *Status {
 	for i := 0; i < len(kv); i += 2 {
 		key := strings.ToLower(kv[i])
@@ -220,12 +229,45 @@ func (s *Status) AddMetadata(h http.Header, keys ...string) *Status {
 
 func (s *Status) IsContent() bool { return s.content != nil }
 func (s *Status) Content() []byte { return s.content }
-func (s *Status) SetContent(content []byte, vals ...string) *Status {
-	s.content = content
+func (s *Status) RemoveContent() {
+	s.content = nil
+	s.md.Delete(ContentType)
+}
+func (s *Status) SetContent(content any, vals ...string) *Status {
+	if content == nil {
+		return s
+	}
+	var empty bool
+
 	if len(vals) == 0 || (len(vals) == 1 && vals[0] == "") {
-		s.md.Append(ContentType, ContentTypeText)
+		empty = true
 	} else {
 		s.md.Append(ContentType, vals...)
+	}
+	if s1, ok := content.(string); ok {
+		buf := []byte(s1)
+		s.content = buf
+		if empty {
+			s.md.Append(ContentType, ContentTypeText)
+		}
+		return s
+	}
+	if buf, ok := content.([]byte); ok {
+		s.content = buf
+		if empty {
+			s.md.Append(ContentType, ContentTypeJson)
+		}
+		return s
+	}
+	buf, err := json.Marshal(content)
+	if err != nil {
+		s.content = []byte("invalid non Json content")
+		s.md.Append(ContentType, ContentTypeText)
+		return s
+	}
+	s.content = buf
+	if empty {
+		s.md.Append(ContentType, ContentTypeJson)
 	}
 	return s
 }

@@ -5,20 +5,18 @@ import (
 	"net/http"
 )
 
-func WriteResponse(w http.ResponseWriter, buf []byte, status *runtime.Status, headers ...string) {
+func WriteResponse(w http.ResponseWriter, data []byte, status *runtime.Status, headers ...string) {
 	if status != nil {
 		w.WriteHeader(status.Http())
 	}
-	for _, name := range headers {
-		status.AddMetadata(w.Header(), name)
-	}
+	status.AddMetadata(w.Header(), headers...)
 	if status.OK() {
-		if buf != nil {
-			w.Write(buf)
+		if data != nil {
+			w.Write(data)
 		}
 	} else {
-		if buf1 := status.Content(); buf1 != nil && status != nil {
-			w.Write(buf1)
+		if buf := status.Content(); buf != nil && status != nil {
+			w.Write(buf)
 		}
 	}
 }

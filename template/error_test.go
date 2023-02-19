@@ -90,18 +90,18 @@ func ExampleErrorHandleFn() {
 	loc := pkgPath + "/ErrorHandleFn"
 	err := errors.New("debug - error message")
 
-	fn := NewErrorHandleFn[DebugError]()
+	fn := Handle[DebugError]()
 	fn(loc, err)
-	fmt.Printf("test: NewErrorHandleFn[DebugErrorHandler]()\n")
+	fmt.Printf("test: Handle[DebugErrorHandler]()\n")
 
-	fn = NewErrorHandleFn[LogError]()
+	fn = Handle[LogError]()
 	fn(loc, errors.New("log - error message"))
-	fmt.Printf("test: NewErrorHandleFn[LogErrorHandler]()\n")
+	fmt.Printf("test: Handle[LogErrorHandler]()\n")
 
 	//Output:
 	//[[] github.com/idiomatic-go/motif/template/ErrorHandleFn [debug - error message]]
-	//test: NewErrorHandleFn[DebugErrorHandler]()
-	//test: NewErrorHandleFn[LogErrorHandler]()
+	//test: Handle[DebugErrorHandler]()
+	//test: Handle[LogErrorHandler]()
 
 }
 
@@ -109,17 +109,17 @@ func ExampleErrorHandleStatus() {
 	loc := pkgPath + "/ErrorHandleStatus"
 	err := errors.New("debug - error message")
 
-	fn := NewErrorStatusHandleFn[DebugError]()
+	fn := StatusHandle[DebugError]()
 	status := fn(runtime.NewStatusError(loc, err))
-	fmt.Printf("test: NewErrorStatusHandleFn[DebugErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
+	fmt.Printf("test: StatusHandle[DebugErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
 
-	fn = NewErrorStatusHandleFn[LogError]()
+	fn = StatusHandle[LogError]()
 	status = fn(runtime.NewStatusError(loc, errors.New("log - error message")))
-	fmt.Printf("test: NewErrorStatusHandleFn[LogErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
+	fmt.Printf("test: StatusHandle[LogErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
 
 	//Output:
 	//[[] github.com/idiomatic-go/motif/template/ErrorHandleStatus [debug - error message]]
-	//test: NewErrorStatusHandleFn[DebugErrorHandler]() [status:Internal] [errors:false]
-	//test: NewErrorStatusHandleFn[LogErrorHandler]() [status:Internal] [errors:false]
+	//test: StatusHandle[DebugErrorHandler]() [status:Internal] [errors:false]
+	//test: StatusHandle[LogErrorHandler]() [status:Internal] [errors:false]
 
 }

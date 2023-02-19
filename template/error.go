@@ -10,6 +10,9 @@ import (
 // ErrorHandleFn - function type for error handling
 type ErrorHandleFn func(location string, errs ...error) *runtime.Status
 
+// ErrorHandleWithContextFn - function type for error handling with context
+type ErrorHandleWithContextFn func(ctx context.Context, location string, errs ...error) *runtime.Status
+
 // ErrorStatusHandleFn - function type for error status handling
 type ErrorStatusHandleFn func(s *runtime.Status) *runtime.Status
 
@@ -95,16 +98,24 @@ func (h LogError) HandleStatus(s *runtime.Status) *runtime.Status {
 	return s
 }
 
-// NewErrorHandleFn - templated function providing an error handle function via a closure
-func NewErrorHandleFn[E ErrorHandler]() ErrorHandleFn {
+// Handle - templated function providing an error handle function via a closure
+func Handle[E ErrorHandler]() ErrorHandleFn {
 	var e E
 	return func(location string, errs ...error) *runtime.Status {
 		return e.Handle(location, errs...)
 	}
 }
 
-// NewErrorStatusHandleFn - templated function providing an error status handle function via a closure
-func NewErrorStatusHandleFn[E ErrorHandler]() ErrorStatusHandleFn {
+// HandleWithContext - templated function providing an error handle function with context via a closure
+func HandleWithContext[E ErrorHandler]() ErrorHandleWithContextFn {
+	var e E
+	return func(ctx context.Context, location string, errs ...error) *runtime.Status {
+		return e.HandleWithContext(ctx, location, errs...)
+	}
+}
+
+// StatusHandle - templated function providing an error status handle function via a closure
+func StatusHandle[E ErrorHandler]() ErrorStatusHandleFn {
 	var e E
 	return func(s *runtime.Status) *runtime.Status {
 		return e.HandleStatus(s)
