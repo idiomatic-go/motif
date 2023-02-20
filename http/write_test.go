@@ -83,5 +83,5 @@ func ExampleWriteResponse_StatusNotOK() {
 	//test: WriteResponse(w,nil,status) -> [status:404] [body:not found] [header:map[Content-Type:[application/json]]]
 	//test: WriteResponse(w,nil,status) -> [status:504] [body:operation timed out] [header:map[Content-Type:[text/plain]]]
 	//test: WriteResponse(w,nil,status) -> [status:400] [body:{"Sql":"insert 1","RowsAffected":1,"Insert":true,"Update":false,"Delete":false}] [header:map[Content-Type:[application/json]]]
-	
+
 }
