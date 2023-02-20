@@ -103,29 +103,92 @@ func ExampleStatus_Content() {
 		State:  "USA",
 		Zip:    "01234",
 	})
+
 	fmt.Printf("test: SetContent(address) -> [content:%v] [type:%v]\n", string(s.Content()), s.MetadataValue(ContentType))
+
+	s.RemoveContent()
+	str = "error message"
+	s.SetContent(errors.New(str))
+	fmt.Printf("test: SetContent(%v) -> [content:%v] [type:%v]\n", str, string(s.Content()), s.MetadataValue(ContentType))
 
 	//Output:
 	//test: SetContent(test string content) -> [content:test string content] [type:text/plain]
 	//test: SetContent(test string content) -> [content:test string content] [type:application/json]
 	//test: SetContent(12345) -> [content:12345] [type:application/json]
 	//test: SetContent(address) -> [content:{"Street":"123 Oak Street","City":"Anytown","State":"USA","Zip":"01234"}] [type:application/json]
+	//test: SetContent(error message) -> [content:error message] [type:text/plain]
 
 }
 
 func ExampleStatus_TemplateParameter() {
-	fmt.Printf("test: testTemplate() -> %v\n", len(testTemplate[address]()))
-
-	//Output:
-	//test: testTemplate() -> 0
+	//fmt.Printf("test: testAddress() -> %v\n", len(testAddress[address](address{})))
 
 }
 
-func testTemplate[T address]() string {
+func testAddress[T *address](param T) T {
 	var t T
+	var t2 address
+
+	//t.GetZip()
+	//param.State
+	t2.GetZip()
 	switch a := any(t).(type) {
 	case address:
-		return a.GetZip()
+		return &a
 	}
-	return ""
+	return t //param
+}
+
+func testInt[T *int](param T) T {
+	var t T
+
+	*t += 6
+	*param += 7
+
+	switch a := any(t).(type) {
+	case int:
+		return &a
+	}
+	return param
+}
+
+func testString[T string](param T) T {
+	var t T
+
+	t += "6"
+	param += "7"
+
+	switch a := any(t).(type) {
+	case string:
+		return T(a)
+	}
+	return t
+}
+
+func testMap[T map[string]string](param T) T {
+	var t T
+
+	param["test"] = "first"
+	t["test"] = "next"
+
+	switch a := any(t).(type) {
+	case map[string]string:
+		a["test"] = "data"
+		return a
+	}
+	return t
+}
+
+func testFunc[T func() int](param T) T {
+	var t T
+
+	param = func() int { return 0 }
+	t = func() int { return 1 }
+
+	switch a := any(t).(type) {
+	case func() int:
+
+		return a
+	}
+	return t
 }

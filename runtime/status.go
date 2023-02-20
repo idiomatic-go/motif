@@ -244,30 +244,34 @@ func (s *Status) SetContent(content any, vals ...string) *Status {
 	} else {
 		s.md.Append(ContentType, vals...)
 	}
-	if s1, ok := content.(string); ok {
-		buf := []byte(s1)
+	switch data := content.(type) {
+	case string:
+		buf := []byte(data)
 		s.content = buf
 		if empty {
 			s.md.Append(ContentType, ContentTypeText)
 		}
-		return s
-	}
-	if buf, ok := content.([]byte); ok {
-		s.content = buf
+	case []byte:
+		s.content = data
 		if empty {
 			s.md.Append(ContentType, ContentTypeJson)
 		}
-		return s
-	}
-	buf, err := json.Marshal(content)
-	if err != nil {
-		s.content = []byte("invalid non Json content")
-		s.md.Append(ContentType, ContentTypeText)
-		return s
-	}
-	s.content = buf
-	if empty {
-		s.md.Append(ContentType, ContentTypeJson)
+	case error:
+		s.content = []byte(data.Error())
+		if empty {
+			s.md.Append(ContentType, ContentTypeText)
+		}
+	default:
+		buf, err := json.Marshal(data)
+		if err != nil {
+			s.content = []byte("invalid non Json serializable type")
+			s.md.Append(ContentType, ContentTypeText)
+		} else {
+			s.content = buf
+			if empty {
+				s.md.Append(ContentType, ContentTypeJson)
+			}
+		}
 	}
 	return s
 }
