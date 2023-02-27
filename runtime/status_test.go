@@ -3,6 +3,7 @@ package runtime
 import (
 	"errors"
 	"fmt"
+	"github.com/idiomatic-go/motif/template"
 	"net/http"
 )
 
@@ -120,9 +121,50 @@ func ExampleStatus_Content() {
 
 }
 
-func ExampleStatus_TemplateParameter() {
-	//fmt.Printf("test: testAddress() -> %v\n", len(testAddress[address](address{})))
+type Request[T template.ErrorHandler] interface {
+	Create(e T, req *http.Request) *http.Request
+}
 
+type Facebook struct{}
+
+func (Facebook) Create(e template.ErrorHandler, req *http.Request) *http.Request {
+	if e != nil {
+	}
+
+	return req
+}
+
+type Function interface {
+	//Call(func() func(ctx context.Context, req *http.Request) *http.Request) *http.Request
+	Call(req *http.Request) *http.Request
+}
+
+type TwitterRequest struct {
+	Data string
+}
+
+func (d TwitterRequest) Call(req *http.Request) *http.Request {
+	r, _ := http.NewRequest("GET", "http.www.google.com", nil)
+	return r
+}
+
+func ExampleStatus_TemplateParameter() {
+
+	//fmt.Printf("test: testAddress() -> %v\n", len(testAddress[address](address{})))
+	//t := &TwitterRequest{}
+	status, _ := do[template.DebugError, Facebook, []byte](nil)
+	fmt.Printf("test: do() -> %v\n", status)
+}
+
+func do[E template.ErrorHandler, R Request[template.ErrorHandler], T any](req *http.Request) (*Status, T) {
+	var t T
+	var e E
+	//var f F
+	//f.Call(req)
+	var r R
+
+	r.Create(e, nil)
+	return nil, t
 }
 
 func testAddress[T *address](param T) T {
