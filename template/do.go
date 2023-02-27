@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func Do[E ErrorHandler, T any, H Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
+func Do[E ErrorHandler, T any, H HttpExchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
 	var e E
 	var h H
 

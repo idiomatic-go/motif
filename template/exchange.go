@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-type Exchange interface {
+type HttpExchange interface {
 	Do(req *http.Request) (*http.Response, error)
 }
 
