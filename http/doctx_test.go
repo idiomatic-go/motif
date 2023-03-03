@@ -4,7 +4,32 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 )
+
+type testContext struct {
+	ctx context.Context
+}
+
+func NewTestContext() *testContext {
+	return &testContext{context.Background()}
+}
+
+func (c *testContext) Deadline() (deadline time.Time, ok bool) {
+	return c.ctx.Deadline()
+}
+
+func (c *testContext) Done() <-chan struct{} {
+	return c.ctx.Done()
+}
+
+func (c *testContext) Err() error {
+	return c.ctx.Err()
+}
+
+func (c *testContext) Value(key any) any {
+	return c.ctx.Value(key)
+}
 
 func doDocxtProxy(req *http.Request) (*http.Response, error) {
 	resp := new(http.Response)
@@ -13,7 +38,7 @@ func doDocxtProxy(req *http.Request) (*http.Response, error) {
 }
 
 func ExampleContextWithDoExisting() {
-	ctx := ContextWithDo(context.Background(), doDocxtProxy)
+	ctx := ContextWithDo(NewTestContext(), doDocxtProxy)
 	fmt.Printf("test: ContextWithDo(context.Background(),doDocxtProxy) -> [ctxDo:%v] [newCtx:%v]\n", IsContextDo(ctx), ctx != context.Background())
 
 	ctxNew := ContextWithDo(ctx, doDocxtProxy)

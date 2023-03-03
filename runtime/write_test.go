@@ -1,9 +1,8 @@
-package http
+package runtime
 
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/motif/runtime"
 	"net/http/httptest"
 )
 
@@ -37,9 +36,9 @@ func ExampleWriteResponse_StatusOK() {
 	str := "text response"
 
 	w := httptest.NewRecorder()
-	status := runtime.NewStatusCode(runtime.StatusOK)
-	status.SetMetadata(runtime.ContentType, runtime.ContentTypeJson)
-	WriteResponse(w, []byte(str), status, runtime.ContentType)
+	status := NewStatusCode(StatusOK)
+	status.SetMetadata(ContentType, ContentTypeJson)
+	WriteResponse(w, []byte(str), status, ContentType)
 	resp := w.Result()
 	fmt.Printf("test: WriteResponse(w,%v,status) -> [status:%v] [body:%v] [header:%v]\n", str, w.Code, w.Body.String(), resp.Header)
 
@@ -52,30 +51,30 @@ func ExampleWriteResponse_StatusNotOK() {
 	str := "server unavailable"
 
 	w := httptest.NewRecorder()
-	status := runtime.NewStatusCode(runtime.StatusUnavailable).SetContent(str)
-	WriteResponse(w, nil, status, runtime.ContentType)
+	status := NewStatusCode(StatusUnavailable).SetContent(str)
+	WriteResponse(w, nil, status, ContentType)
 	fmt.Printf("test: WriteResponse(w,nil,status) -> [status:%v] [body:%v] [header:%v]\n", w.Code, w.Body.String(), w.Result().Header)
 
 	w = httptest.NewRecorder()
-	status = runtime.NewStatusCode(runtime.StatusNotFound).SetContent([]byte("not found"))
-	WriteResponse(w, nil, status, runtime.ContentType)
+	status = NewStatusCode(StatusNotFound).SetContent([]byte("not found"))
+	WriteResponse(w, nil, status, ContentType)
 	fmt.Printf("test: WriteResponse(w,nil,status) -> [status:%v] [body:%v] [header:%v]\n", w.Code, w.Body.String(), w.Result().Header)
 
 	str = "operation timed out"
 	w = httptest.NewRecorder()
-	status = runtime.NewStatusCode(runtime.StatusDeadlineExceeded).SetContent(errors.New(str))
-	WriteResponse(w, nil, status, runtime.ContentType)
+	status = NewStatusCode(StatusDeadlineExceeded).SetContent(errors.New(str))
+	WriteResponse(w, nil, status, ContentType)
 	fmt.Printf("test: WriteResponse(w,nil,status) -> [status:%v] [body:%v] [header:%v]\n", w.Code, w.Body.String(), w.Result().Header)
 
 	w = httptest.NewRecorder()
-	status = runtime.NewStatusCode(runtime.StatusInvalidArgument).SetContent(commandTag{
+	status = NewStatusCode(StatusInvalidArgument).SetContent(commandTag{
 		Sql:          "insert 1",
 		RowsAffected: 1,
 		Insert:       true,
 		Update:       false,
 		Delete:       false,
 	})
-	WriteResponse(w, nil, status, runtime.ContentType)
+	WriteResponse(w, nil, status, ContentType)
 	fmt.Printf("test: WriteResponse(w,nil,status) -> [status:%v] [body:%v] [header:%v]\n", w.Code, w.Body.String(), w.Result().Header)
 
 	//Output:

@@ -1,11 +1,10 @@
-package http
+package runtime
 
 import (
-	"github.com/idiomatic-go/motif/runtime"
 	"net/http"
 )
 
-func WriteResponse(w http.ResponseWriter, data []byte, status *runtime.Status, headers ...string) {
+func WriteResponse(w http.ResponseWriter, data []byte, status *Status, headers ...string) {
 	if status == nil {
 		w.WriteHeader(http.StatusOK)
 		if data != nil {

@@ -19,6 +19,9 @@ func DoClient(req *http.Request, client *http.Client) (*http.Response, error) {
 	if client == nil {
 		return nil, errors.New("client is nil")
 	}
+	//if e,ok := any(req.Context()).(Exchange); ok {
+	//	e.Do()xc
+	//}
 	if IsContextDoInRequest(req) {
 		return ContextDo(req)
 	}

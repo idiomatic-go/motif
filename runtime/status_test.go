@@ -3,7 +3,7 @@ package runtime
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/motif/template"
+	//"github.com/idiomatic-go/motif/template"
 	"net/http"
 )
 
@@ -121,6 +121,7 @@ func ExampleStatus_Content() {
 
 }
 
+/*
 type Request[T template.ErrorHandler] interface {
 	Create(e T, req *http.Request) *http.Request
 }
@@ -234,3 +235,6 @@ func testFunc[T func() int](param T) T {
 	}
 	return t
 }
+
+
+*/
