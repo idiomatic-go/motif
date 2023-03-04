@@ -1,26 +1,69 @@
 package http
 
 import (
+	"context"
+	"errors"
 	"fmt"
+	"github.com/idiomatic-go/motif/http/httptest"
+	"io"
 	"net/http"
+	"time"
 )
 
-//const (
-//	helloWorldUri         = "proxy://www.somestupidname.come"
-//	serviceUnavailableUri = "http://www.unavailable.com"
-//	http503FileName       = "resource/http/http-503.txt"
-//)
+const (
+	helloWorldUri         = "proxy://www.somestupidname.come"
+	serviceUnavailableUri = "http://www.unavailable.com"
+	http503FileName       = "resource/http/http-503.txt"
+)
 
-//var doCtx = ContextWithDo(context.Background(), doProxy)
+type exchangeContext interface {
+	context.Context
+	Exchange
+}
+
+type exchangeData struct {
+	ctx  context.Context
+	exec Exchange
+}
+
+func newContext(ctx context.Context, exec Exchange) context.Context {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	return &exchangeData{ctx: ctx, exec: exec}
+}
+
+func (c *exchangeData) Deadline() (deadline time.Time, ok bool) {
+	return c.ctx.Deadline()
+}
+
+func (c *exchangeData) Done() <-chan struct{} {
+	return c.ctx.Done()
+}
+
+func (c *exchangeData) Err() error {
+	return c.ctx.Err()
+}
+
+func (c *exchangeData) Value(key any) any {
+	return c.ctx.Value(key)
+}
+
+func (c *exchangeData) Do(req *http.Request) (*http.Response, error) {
+	if c.exec == nil {
+		return nil, errors.New("invalid argument: Exchange interface is nil")
+	}
+	return c.exec.Do(req)
+}
+
+var exchangeCtx = newContext(nil, NewExchange(exchangeDo))
 
 //
 // When reading http from a text file, be sure you have the expected blank line between header and body.
 // If there is not a blank line after the header section, even if there is not a body, you will receive an
 // Unexpected EOF error when calling the golang http.ReadResponse function.
 //
-
-/*
-func doProxy(req *http.Request) (*http.Response, error) {
+func exchangeDo(req *http.Request) (*http.Response, error) {
 	if req == nil || req.URL == nil {
 		return nil, errors.New("request or request URL is nil")
 	}
@@ -39,30 +82,13 @@ func doProxy(req *http.Request) (*http.Response, error) {
 		resp, err := httptest.ReadResponseTest(http503FileName)
 		return resp, err
 	default:
-		fmt.Printf("test: doProxy(req) : unmatched pattern %v", httptest.Pattern(req))
+		fmt.Printf("test: exchangeDo(req) : unmatched pattern %v", httptest.Pattern(req))
 	}
 	return nil, nil
 }
 
-
-*/
-func ExampleDo_InvalidArgument() {
-	_, s := Do(nil)
-	fmt.Printf("test: Do(nil) -> [%v]\n", s)
-
-	req, _ := http.NewRequest("", "http://www.google.com", nil)
-	_, s = DoClient(req, nil)
-	fmt.Printf("test: DoClient(req,nil) -> [%v]\n", s)
-
-	//Output:
-	//test: Do(nil) -> [request is nil]
-	//test: DoClient(req,nil) -> [client is nil]
-
-}
-
-/*
-func ExampleDo_Proxy_HttpError() {
-	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, httptest.HttpErrorUri, nil)
+func ExampleExchange_Proxy_HttpError() {
+	req, _ := http.NewRequestWithContext(exchangeCtx, http.MethodGet, httptest.HttpErrorUri, nil)
 	resp, err := Do(req)
 	fmt.Printf("test: Do(req) -> [%v] [response:%v]\n", err, resp)
 
@@ -71,10 +97,8 @@ func ExampleDo_Proxy_HttpError() {
 
 }
 
-
-
-func ExampleDo_Proxy_IOError() {
-	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, httptest.BodyIOErrorUri, nil)
+func ExampleExchange_Proxy_IOError() {
+	req, _ := http.NewRequestWithContext(exchangeCtx, http.MethodGet, httptest.BodyIOErrorUri, nil)
 	resp, err := Do(req)
 	fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [body:%v]\n", err, resp != nil, resp.StatusCode, resp.Body != nil)
 
@@ -88,8 +112,8 @@ func ExampleDo_Proxy_IOError() {
 
 }
 
-func ExampleDo_Proxy_HellowWorld() {
-	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, helloWorldUri, nil)
+func ExampleExchange_Proxy_HellowWorld() {
+	req, _ := http.NewRequestWithContext(exchangeCtx, http.MethodGet, helloWorldUri, nil)
 	resp, err := Do(req)
 	fmt.Printf("test: Do(req) -> [%v] [resp:%v] [statusCode:%v] [content-type:%v] [content-length:%v] [body:%v]\n",
 		err, resp != nil, resp.StatusCode, resp.Header.Get("content-type"), resp.Header.Get("content-length"), resp.Body != nil)
@@ -104,8 +128,8 @@ func ExampleDo_Proxy_HellowWorld() {
 
 }
 
-func ExampleDo_Proxy_ServiceUnavailable() {
-	req, _ := http.NewRequestWithContext(doCtx, http.MethodGet, serviceUnavailableUri, nil)
+func ExampleExchange_Proxy_ServiceUnavailable() {
+	req, _ := http.NewRequestWithContext(exchangeCtx, http.MethodGet, serviceUnavailableUri, nil)
 	resp, err := Do(req)
 	if err != nil {
 		fmt.Printf("test: Do(req) -> %v\n", err)
@@ -121,5 +145,3 @@ func ExampleDo_Proxy_ServiceUnavailable() {
 	//test: Do(req) -> [<nil>] [resp:true] [statusCode:503] [content-type:text/html] [body:true]
 
 }
-
-*/
