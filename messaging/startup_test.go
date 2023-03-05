@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/idiomatic-go/motif/runtime"
-	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -56,7 +55,7 @@ func ExampleStartup_Success() {
 	RegisterResource(uri3, c)
 	go startupDepends(c, nil)
 
-	status := Startup[template.DebugError, template.NilOutput](time.Second*2, nil)
+	status := Startup[runtime.DebugError, runtime.NilOutput](time.Second*2, nil)
 
 	fmt.Printf("test: Startup() -> [%v]\n", status)
 
@@ -85,7 +84,7 @@ func ExampleStartup_Failure() {
 	RegisterResource(uri3, c)
 	go startupDepends(c, errors.New("startup failure error message"))
 
-	status := Startup[template.DebugError, template.StdOutput](time.Second*2, nil)
+	status := Startup[runtime.DebugError, runtime.StdOutput](time.Second*2, nil)
 
 	fmt.Printf("test: Startup() -> [%v]\n", status)
 

@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/idiomatic-go/motif/runtime"
-	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -37,7 +36,7 @@ func Shutdown() {
 }
 
 // Startup - templated function to start all registered resources.
-func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
+func Startup[E runtime.ErrorHandler, O runtime.OutputHandler](duration time.Duration, content ContentMap) (status *runtime.Status) {
 	var e E
 	var failures []string
 	var count = directory.Count()
@@ -90,7 +89,7 @@ func sendMessages(msgs messageMap) {
 	}
 }
 
-func handleErrors[E template.ErrorHandler](failures []string, cache *MessageCache) {
+func handleErrors[E runtime.ErrorHandler](failures []string, cache *MessageCache) {
 	var e E
 	for _, uri := range failures {
 		msg, err := cache.Get(uri)
@@ -103,7 +102,7 @@ func handleErrors[E template.ErrorHandler](failures []string, cache *MessageCach
 	}
 }
 
-func handleStatus[O template.OutputHandler](cache *MessageCache) {
+func handleStatus[O runtime.OutputHandler](cache *MessageCache) {
 	var o O
 	for _, uri := range cache.Uri() {
 		msg, err := cache.Get(uri)

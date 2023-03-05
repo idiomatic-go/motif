@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/idiomatic-go/motif/runtime"
-	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -16,7 +15,7 @@ const (
 var pingLocation = pkgPath + "/ping"
 
 // Ping - templated function to "ping" a resource
-func Ping[E template.ErrorHandler](ctx context.Context, uri string) (status *runtime.Status) {
+func Ping[E runtime.ErrorHandler](ctx context.Context, uri string) (status *runtime.Status) {
 	var e E
 
 	if uri == "" {

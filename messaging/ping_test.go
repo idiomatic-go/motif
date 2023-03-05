@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/idiomatic-go/motif/runtime"
-	"github.com/idiomatic-go/motif/template"
 	"time"
 )
 
@@ -20,26 +19,26 @@ func ExamplePing() {
 	c := make(chan Message, 16)
 	RegisterResource(uri1, c)
 	go pingGood(c)
-	status := Ping[template.DebugError](nil, uri1)
+	status := Ping[runtime.DebugError](nil, uri1)
 	duration := status.Duration()
 	fmt.Printf("test: Ping(good) -> [%v] [duration:%v]\n", status, duration)
 
 	c = make(chan Message, 16)
 	RegisterResource(uri2, c)
 	go pingBad(c)
-	status = Ping[template.DebugError](nil, uri2)
+	status = Ping[runtime.DebugError](nil, uri2)
 	fmt.Printf("test: Ping(bad) -> [%v] [duration:%v]\n", status, duration)
 
 	c = make(chan Message, 16)
 	RegisterResource(uri3, c)
 	go pingError(c, errors.New("ping depends error message"))
-	status = Ping[template.DebugError](nil, uri3)
+	status = Ping[runtime.DebugError](nil, uri3)
 	fmt.Printf("test: Ping(error) -> [%v] [duration:%v]\n", status, duration)
 
 	c = make(chan Message, 16)
 	RegisterResource(uri4, c)
 	go pingDelay(c)
-	status = Ping[template.DebugError](nil, uri4)
+	status = Ping[runtime.DebugError](nil, uri4)
 	fmt.Printf("test: Ping(delay) -> [%v] [duration:%v]\n", status, duration)
 
 	//Output:

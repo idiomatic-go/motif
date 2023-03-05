@@ -1,12 +1,11 @@
-package template
+package exchange
 
 import (
-	http2 "github.com/idiomatic-go/motif/http"
 	"github.com/idiomatic-go/motif/runtime"
 	"net/http"
 )
 
-func Do[E ErrorHandler, T any, H http2.Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
+func DoT[E runtime.ErrorHandler, T any, H Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
 	var e E
 	var h H
 

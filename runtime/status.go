@@ -4,11 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/go-http-utils/headers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"net/http"
 	"strings"
 	"time"
+)
+
+const (
+	ContentTypeText = "text/plain" // charset=utf-8
+	ContentTypeJson = "application/json"
 )
 
 // https://grpc.github.io/grpc/core/md_doc_statuscodes.html
@@ -231,7 +237,7 @@ func (s *Status) IsContent() bool { return s.content != nil }
 func (s *Status) Content() []byte { return s.content }
 func (s *Status) RemoveContent() {
 	s.content = nil
-	s.md.Delete(ContentType)
+	s.md.Delete(headers.ContentType)
 }
 func (s *Status) SetContent(content any, vals ...string) *Status {
 	if content == nil {
@@ -242,34 +248,34 @@ func (s *Status) SetContent(content any, vals ...string) *Status {
 	if len(vals) == 0 || (len(vals) == 1 && vals[0] == "") {
 		empty = true
 	} else {
-		s.md.Append(ContentType, vals...)
+		s.md.Append(headers.ContentType, vals...)
 	}
 	switch data := content.(type) {
 	case string:
 		buf := []byte(data)
 		s.content = buf
 		if empty {
-			s.md.Append(ContentType, ContentTypeText)
+			s.md.Append(headers.ContentType, ContentTypeText)
 		}
 	case []byte:
 		s.content = data
 		if empty {
-			s.md.Append(ContentType, ContentTypeJson)
+			s.md.Append(headers.ContentType, ContentTypeJson)
 		}
 	case error:
 		s.content = []byte(data.Error())
 		if empty {
-			s.md.Append(ContentType, ContentTypeText)
+			s.md.Append(headers.ContentType, ContentTypeText)
 		}
 	default:
 		buf, err := json.Marshal(data)
 		if err != nil {
 			s.content = []byte("invalid non Json serializable type")
-			s.md.Append(ContentType, ContentTypeText)
+			s.md.Append(headers.ContentType, ContentTypeText)
 		} else {
 			s.content = buf
 			if empty {
-				s.md.Append(ContentType, ContentTypeJson)
+				s.md.Append(headers.ContentType, ContentTypeJson)
 			}
 		}
 	}

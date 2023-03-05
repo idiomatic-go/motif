@@ -1,9 +1,8 @@
-package template
+package runtime
 
 import (
 	"errors"
 	"fmt"
-	"github.com/idiomatic-go/motif/runtime"
 )
 
 func ExampleNoOpErrorHandler_Handle() {
@@ -14,10 +13,10 @@ func ExampleNoOpErrorHandler_Handle() {
 	fmt.Printf("test: Handle(location,nil) -> [%v]\n", h.Handle(location, nil))
 	fmt.Printf("test: Handle(location,err) -> [%v]\n", h.Handle(location, err))
 
-	s := runtime.NewStatus(runtime.StatusInternal, location, nil)
+	s := NewStatus(StatusInternal, location, nil)
 	fmt.Printf("test: HandleStatus(s) -> [%v]\n", h.HandleStatus(s))
 
-	s = runtime.NewStatus(runtime.StatusInternal, location, err)
+	s = NewStatus(StatusInternal, location, err)
 	fmt.Printf("test: HandleStatus(s) -> [prev:%v] [curr:%v]\n", s, h.HandleStatus(s))
 
 	//Output:
@@ -30,7 +29,7 @@ func ExampleNoOpErrorHandler_Handle() {
 
 func ExampleDebugHandler_Handle() {
 	location := "/DebugHandler"
-	ctx := runtime.ContextWithRequestId(nil, "123-request-id")
+	ctx := ContextWithRequestId(nil, "123-request-id")
 	err := errors.New("test error")
 	var h DebugError
 
@@ -40,10 +39,10 @@ func ExampleDebugHandler_Handle() {
 	s = h.HandleWithContext(ctx, location, err)
 	fmt.Printf("test: HandleWithContext(ctx,location,err) -> [%v] [errors:%v]\n", s, s.IsErrors())
 
-	s = runtime.NewStatus(runtime.StatusInternal, location, nil).SetContext(ctx)
+	s = NewStatus(StatusInternal, location, nil).SetContext(ctx)
 	fmt.Printf("test: HandleStatus(s) -> [%v] [errors:%v]\n", h.HandleStatus(s), s.IsErrors())
 
-	s = runtime.NewStatus(runtime.StatusInternal, location, err).SetContext(ctx)
+	s = NewStatus(StatusInternal, location, err).SetContext(ctx)
 	errors := s.IsErrors()
 	s1 := h.HandleStatus(s)
 	fmt.Printf("test: HandleStatus(s) -> [prev:%v] [prev-errors:%v] [curr:%v] [curr-errors:%v]\n", s, errors, s1, s1.IsErrors())
@@ -60,7 +59,7 @@ func ExampleDebugHandler_Handle() {
 
 func ExampleLogHandler_Handle() {
 	location := "/LogHandler"
-	ctx := runtime.ContextWithRequestId(nil, "")
+	ctx := ContextWithRequestId(nil, "")
 	err := errors.New("test error")
 	var h LogError
 
@@ -70,10 +69,10 @@ func ExampleLogHandler_Handle() {
 	s = h.HandleWithContext(ctx, location, err)
 	fmt.Printf("test: HandleWithContext(ctx,location,err) -> [%v] [errors:%v]\n", s, s.IsErrors())
 
-	s = runtime.NewStatus(runtime.StatusInternal, location, nil).SetContext(ctx)
+	s = NewStatus(StatusInternal, location, nil).SetContext(ctx)
 	fmt.Printf("test: HandleStatus(s) -> [%v] [errors:%v]\n", h.HandleStatus(s), s.IsErrors())
 
-	s = runtime.NewStatus(runtime.StatusInternal, location, err).SetContext(ctx)
+	s = NewStatus(StatusInternal, location, err).SetContext(ctx)
 	errors := s.IsErrors()
 	s1 := h.HandleStatus(s)
 	fmt.Printf("test: HandleStatus(s) -> [prev:%v] [prev-errors:%v] [curr:%v] [curr-errors:%v]\n", s, errors, s1, s1.IsErrors())
@@ -99,7 +98,7 @@ func ExampleErrorHandleFn() {
 	fmt.Printf("test: Handle[LogErrorHandler]()\n")
 
 	//Output:
-	//[[] github.com/idiomatic-go/motif/template/ErrorHandleFn [debug - error message]]
+	//[[] github.com/idiomatic-go/motif/runtime/ErrorHandleFn [debug - error message]]
 	//test: Handle[DebugErrorHandler]()
 	//test: Handle[LogErrorHandler]()
 
@@ -110,15 +109,15 @@ func ExampleErrorHandleStatus() {
 	err := errors.New("debug - error message")
 
 	fn := StatusHandle[DebugError]()
-	status := fn(runtime.NewStatusError(loc, err))
+	status := fn(NewStatusError(loc, err))
 	fmt.Printf("test: StatusHandle[DebugErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
 
 	fn = StatusHandle[LogError]()
-	status = fn(runtime.NewStatusError(loc, errors.New("log - error message")))
+	status = fn(NewStatusError(loc, errors.New("log - error message")))
 	fmt.Printf("test: StatusHandle[LogErrorHandler]() [status:%v] [errors:%v]\n", status, status.IsErrors())
 
 	//Output:
-	//[[] github.com/idiomatic-go/motif/template/ErrorHandleStatus [debug - error message]]
+	//[[] github.com/idiomatic-go/motif/runtime/ErrorHandleStatus [debug - error message]]
 	//test: StatusHandle[DebugErrorHandler]() [status:Internal] [errors:false]
 	//test: StatusHandle[LogErrorHandler]() [status:Internal] [errors:false]
 

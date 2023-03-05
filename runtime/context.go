@@ -2,11 +2,8 @@ package runtime
 
 import (
 	"context"
-	"errors"
 	"github.com/google/uuid"
-	http2 "github.com/idiomatic-go/motif/http"
 	"net/http"
-	"time"
 )
 
 const (
@@ -62,73 +59,17 @@ func ContextRequestId(ctx context.Context) string {
 	return ""
 }
 
-type ExchangeContext interface {
-	context.Context
-	http2.Exchange
-	withValue(key, val any) context.Context
-}
-
-type exchangeContext struct {
-	ctx  context.Context
-	exec http2.Exchange
-}
-
-func NewExchangeContext(ctx context.Context, exec http2.Exchange) context.Context {
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	return &exchangeContext{ctx: ctx, exec: exec}
-}
-
-func (c *exchangeContext) Deadline() (deadline time.Time, ok bool) {
-	return c.ctx.Deadline()
-}
-
-func (c *exchangeContext) Done() <-chan struct{} {
-	return c.ctx.Done()
-}
-
-func (c *exchangeContext) Err() error {
-	return c.ctx.Err()
-}
-
-func (c *exchangeContext) Value(key any) any {
-	return c.ctx.Value(key)
-}
-
-func (c *exchangeContext) Do(req *http.Request) (*http.Response, error) {
-	if c.exec == nil {
-		return nil, errors.New("invalid argument: Exchange interface is nil")
-	}
-	return c.exec.Do(req)
-}
-
-//func (c *exchangeContext) t() *exchangeContext {
-//	return c
-//}
-
-func (c *exchangeContext) withValue(key, val any) context.Context {
-	c.ctx = context.WithValue(c.ctx, key, val)
-	return c
-}
-
+// ContextWithValue - create a new context with a value, updating the context if it is an HttpExchange context
 func ContextWithValue(ctx context.Context, key any, val any) context.Context {
 	if ctx == nil {
 		return nil
 	}
-	if curr, ok := any(ctx).(ExchangeContext); ok {
+	if curr, ok := any(ctx).(withValue); ok {
 		//ctx2 := curr.t()
 		//ctx2.ctx = context.WithValue(ctx2.ctx, key, val)
 		//ctx2.ctx = context.WithValue(ctx2.ctx, key, val)
 		//return ctx2
 		return curr.withValue(key, val)
 	}
-	return ctx
-}
-
-func IsExchangeContext(ctx context.Context) bool {
-	if _, ok := any(ctx).(ExchangeContext); ok {
-		return true
-	}
-	return false
+	return context.WithValue(ctx, key, val)
 }
