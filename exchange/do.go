@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-var DefaultClient = http.DefaultClient
+var Client = http.DefaultClient
 
 func init() {
 	t, ok := http.DefaultTransport.(*http.Transport)
@@ -18,15 +18,15 @@ func init() {
 		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 		transport.MaxIdleConns = 200
 		transport.MaxIdleConnsPerHost = 100
-		DefaultClient = &http.Client{Transport: transport, Timeout: time.Second * 5}
+		Client = &http.Client{Transport: transport, Timeout: time.Second * 5}
 	} else {
-		DefaultClient = &http.Client{Transport: http.DefaultTransport, Timeout: time.Second * 5}
+		Client = &http.Client{Transport: http.DefaultTransport, Timeout: time.Second * 5}
 	}
 }
 
 // Do - process a "client.Do" request with the http.DefaultClient
 func Do(req *http.Request) (*http.Response, error) {
-	return DoClient(req, DefaultClient) //http.DefaultClient) // client)htt
+	return DoClient(req, Client)
 }
 
 // DoClient - process a "client.Do" request with the given client. Also, check the req.Context to determine
