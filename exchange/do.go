@@ -26,7 +26,7 @@ func init() {
 
 // Do - process a "client.Do" request with the http.DefaultClient
 func Do(req *http.Request) (*http.Response, error) {
-	return DoClient(req, client)
+	return DoClient(req, http.DefaultClient) // client)htt
 }
 
 // DoClient - process a "client.Do" request with the given client. Also, check the req.Context to determine
