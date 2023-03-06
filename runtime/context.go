@@ -33,7 +33,7 @@ func ContextWithRequestId(ctx context.Context, requestId string) context.Context
 	if requestId == "" {
 		requestId = uuid.New().String()
 	}
-	return context.WithValue(ctx, requestContextKey, requestId)
+	return ContextWithValue(ctx, requestContextKey, requestId)
 }
 
 // ContextWithRequest - creates a new Context with a request id from the request headers
