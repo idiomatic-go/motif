@@ -26,6 +26,15 @@ func DoT[E runtime.ErrorHandler, T any, H Exchange](req *http.Request) (resp *ht
 }
 ~~~
 
+The deserialization function is also templated:
+
+~~~
+// Deserialize - templated function, providing deserialization of a request/response body
+func Deserialize[E runtime.ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
+    // implementation details
+}
+~~~
+
 Testing Http calls is implemented through a new design pattern: a context.Context interface that contains an http.Client.Do() proxy.
 ~~~
 // Exchange - interface for Http request/response interaction
