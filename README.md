@@ -10,39 +10,46 @@ Package dependencies also need to be obsessively managed. Rob Pike lists an impo
 	    is some deficiency in the basic design — you didn't really hit the right design point. Instead of adding an option, think 
 	    about what was forcing you to add that option.
 
-With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. I use the term templates over generics, as templates are a paradigm, and generics connotes a class of implementations. Templates in C++ also support value parameters, which if implemented in Go, would allow passing a function as a template parameter. This functionality would allow further customization of templated code.
+With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. The term templates is used over generics, as templates are a paradigm, and generics connotes a class of implementations. Templates in C++ also support value parameters, which if implemented in Go, would allow passing a function as a template parameter. This functionality would allow further customization of templated code.
 
 What follows is a description of the packages in Motif, highlighting specific patterns and template implementations.  
 
 
 
-## http
-[Http][httppkg] introduces a new design pattern for testing http.Client.Do() calls: DoProxy. A DoProxy is added to a context.Context, and all client requests
-are proxied,
-~~~
-// DoProxy - Http client.Do proxy type
-type DoProxy func(req *http.Request) (*http.Response, error)
+## exchange
+[Exchange][exchangepkg] provides functionality for processing an Http request/response. Exchange functionality is provied via a templated function, utilizing
+template paramters for error processing, deserialization type, and the function for processing the http.Client.Do():
 
-// ContextWithDo - DoProxy context creation
-func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
-	if ctx == nil {
-		ctx = context.Background()
-	} else {
-		if IsContextDo(ctx) {
-			return ctx
-		}
-	}
-	if fn == nil {
-		return ctx
-	}
-	return &doContext{ctx, doContextKey, fn} 
+~~~
+func DoT[E runtime.ErrorHandler, T any, H Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
+    // implementation details
 }
 ~~~
 
-Http also includes a common http write response function:
+The deserialization function is also templated:
+
 ~~~
+// Deserialize - templated function, providing deserialization of a request/response body
+func Deserialize[E runtime.ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
+    // implementation details
+}
+~~~
+
+Testing Http calls is implemented through a proxy design pattern: a context.Context interface that contains an http.Client.Do() call.
+
+~~~
+// Exchange - interface for Http request/response interaction
+type Exchange interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+~~~
+
+Exchange also includes a common http write response function:
+
+~~~
+// WriteResponse - write a http.Response, utilizing the data, status, and headers for controlling the content
 func WriteResponse(w http.ResponseWriter, buf []byte, status *runtime.Status, headers ...string) {
-    // implementation
+    // implementation details
 }
 ~~~
 
@@ -61,33 +68,13 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 }
 ~~~
 
-## resource
-[Resource][resourcepkg] implements configuration map deserialization and validation.
+
 
 ## runtime
-[Runtime][runtimepkg] implements environment, request context, and status types. The status type is used extensively as a function return value, and provides error,
-http, and gRPC status codes.
+[Runtime][runtimepkg] implements environment, request context, status, error, and output types. The status type is used extensively as a function return value, and provides error, http, and gRPC status codes. 
 
-## template
-[Template][templatepkg] contains template functions for http.Request and http.Response body deserialization, and string expansion:
-~~~
-// Deserialize - templated function, providing deserialization of a request/response body
-func Deserialize[E ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
-    // Implementation details
-}
-    
- // Resolver - template parameter name value lookup
-type Resolver interface {
-	Lookup(name string) (string, error)
-}
+The error and output types are designed to be used as template parameters.
 
-// Expand - templated function to expand a template string, utilizing a resolver
-func Expand[T Resolver](t string) (string, error) {   
-   // Implementation details
-}
-~~~
-
-Template parameters for output and error handling are also included:
 ~~~
 // ErrorHandler - template parameter error handler interface
 type ErrorHandler interface {
@@ -102,6 +89,20 @@ type OutputHandler interface {
 }
 ~~~
 
+Context functionality is provied for a request Id, and Http exchange testing:
+
+~~~
+// ContextWithRequestId - creates a new Context with a request id
+func ContextWithRequestId(ctx context.Context, requestId string) context.Context {
+    // implementation details
+}
+
+// ContextWithHttpExchange - create a new Context interface, containing a Http exchange function
+func ContextWithHttpExchange(ctx context.Context, do func(*http.Request) (*http.Response, error)) context.Context {
+    // implementation details
+}
+~~~
+
 [emuller]: <https://www.youtube.com/watch?v=ltqV6pDKZD8>
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [rpike]:  <https://go-proverbs.github.io/>
@@ -110,9 +111,8 @@ type OutputHandler interface {
 [runix]: <https://en.wikipedia.org/wiki/Research_Unix>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
-[httppkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/http>
+[exchangepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/exchange>
 [messagingpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/messaging>
-[resourcepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/resource>
 [runtimepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/runtime>
-[templatepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/template>
+
 
