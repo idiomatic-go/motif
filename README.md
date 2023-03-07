@@ -68,27 +68,7 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 
 
 ## runtime
-[Runtime][runtimepkg] implements environment, request context, and status types. The status type is used extensively as a function return value, and provides error,
-http, and gRPC status codes.
-
-## template
-[Template][templatepkg] contains template functions for http.Request and http.Response body deserialization, and string expansion:
-~~~
-// Deserialize - templated function, providing deserialization of a request/response body
-func Deserialize[E ErrorHandler, T any](body io.ReadCloser) (T, *runtime.Status) {
-    // Implementation details
-}
-    
- // Resolver - template parameter name value lookup
-type Resolver interface {
-	Lookup(name string) (string, error)
-}
-
-// Expand - templated function to expand a template string, utilizing a resolver
-func Expand[T Resolver](t string) (string, error) {   
-   // Implementation details
-}
-~~~
+[Runtime][runtimepkg] implements environment, request context, status types, error and output types The status type is used extensively as a function return value, and provides error, http, and gRPC status codes. The error and output types are designed to be used as template parameters.
 
 Template parameters for output and error handling are also included:
 ~~~
@@ -113,9 +93,8 @@ type OutputHandler interface {
 [runix]: <https://en.wikipedia.org/wiki/Research_Unix>
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
-[httppkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/http>
 [exchangepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/exchange>
 [messagingpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/messaging>
 [runtimepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/runtime>
-[templatepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/template>
+
 
