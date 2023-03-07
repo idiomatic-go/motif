@@ -86,6 +86,19 @@ type OutputHandler interface {
 }
 ~~~
 
+Context functioanlity is provied for a request Id, and Http testing:
+
+~~~
+// ContextWithRequestId - creates a new Context with a request id
+func ContextWithRequestId(ctx context.Context, requestId string) context.Context {
+    // implementation details
+}
+
+func ContextWithHttpExchange(ctx context.Context, do func(*http.Request) (*http.Response, error)) context.Context {
+    // implementation details
+}
+~~~
+
 [emuller]: <https://www.youtube.com/watch?v=ltqV6pDKZD8>
 [rgriesemer]: <https://www.youtube.com/watch?v=0ReKdcpNyQg>
 [rpike]:  <https://go-proverbs.github.io/>
