@@ -19,8 +19,8 @@ What follows is a description of the packages in Motif, highlighting specific pa
 ## exchange
 [Exchange][exchangepkg] includes the functionality needed to do an Http request/response. Exchange functionality is provied via a templated function, utilizing
 template paramters for error processing, deserialization type, and the function for processing the Http request/response:
-for processing an Http request/response:
 
+~~~
 func DoT[E runtime.ErrorHandler, T any, H Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
     // implementation details
 }
