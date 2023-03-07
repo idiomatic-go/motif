@@ -16,6 +16,7 @@ type exchangeContext struct {
 	do  func(*http.Request) (*http.Response, error)
 }
 
+// ContextWithHttpExchange - create a new Context interface, containing a Http exchange function
 func ContextWithHttpExchange(ctx context.Context, do func(*http.Request) (*http.Response, error)) context.Context {
 	if ctx == nil {
 		ctx = context.Background()

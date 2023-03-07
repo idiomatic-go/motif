@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// WriteResponse - write a http.Response, utilizing the data, status, and headers for controlling the content
 func WriteResponse(w http.ResponseWriter, data []byte, status *runtime.Status, headers ...string) {
 	if status == nil {
 		w.WriteHeader(http.StatusOK)

@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+// Exchange - interface for Http request/response interaction
 type Exchange interface {
 	Do(req *http.Request) (*http.Response, error)
 }
