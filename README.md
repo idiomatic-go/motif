@@ -17,7 +17,7 @@ What follows is a description of the packages in Motif, highlighting specific pa
 
 
 ## exchange
-[Exchange][exchangepkg] includes the functionality needed to do an Http request/response. Exchange functionality is provied via a templated function, utilizing
+[Exchange][exchangepkg] provides functionality for processing an Http request/response. Exchange functionality is provied via a templated function, utilizing
 template paramters for error processing, deserialization type, and the function for processing the http.Client.Do():
 
 ~~~
@@ -35,7 +35,8 @@ func Deserialize[E runtime.ErrorHandler, T any](body io.ReadCloser) (T, *runtime
 }
 ~~~
 
-Testing Http calls is implemented through a new design pattern: a context.Context interface that contains an http.Client.Do() proxy.
+Testing Http calls is implemented through a proxy design pattern: a context.Context interface that contains an http.Client.Do() call.
+
 ~~~
 // Exchange - interface for Http request/response interaction
 type Exchange interface {
@@ -44,6 +45,7 @@ type Exchange interface {
 ~~~
 
 Exchange also includes a common http write response function:
+
 ~~~
 func WriteResponse(w http.ResponseWriter, buf []byte, status *runtime.Status, headers ...string) {
     // implementation details
@@ -86,7 +88,7 @@ type OutputHandler interface {
 }
 ~~~
 
-Context functioanlity is provied for a request Id, and Http testing:
+Context functionality is provied for a request Id, and Http testing:
 
 ~~~
 // ContextWithRequestId - creates a new Context with a request id
@@ -94,6 +96,7 @@ func ContextWithRequestId(ctx context.Context, requestId string) context.Context
     // implementation details
 }
 
+// ContextWithHttpExchange - create a new Context interface, containing a Http exchange function
 func ContextWithHttpExchange(ctx context.Context, do func(*http.Request) (*http.Response, error)) context.Context {
     // implementation details
 }
