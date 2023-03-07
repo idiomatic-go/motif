@@ -47,6 +47,7 @@ type Exchange interface {
 Exchange also includes a common http write response function:
 
 ~~~
+// WriteResponse - write a http.Response, utilizing the data, status, and headers for controlling the content
 func WriteResponse(w http.ResponseWriter, buf []byte, status *runtime.Status, headers ...string) {
     // implementation details
 }
