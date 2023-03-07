@@ -10,39 +10,34 @@ Package dependencies also need to be obsessively managed. Rob Pike lists an impo
 	    is some deficiency in the basic design — you didn't really hit the right design point. Instead of adding an option, think 
 	    about what was forcing you to add that option.
 
-With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. I use the term templates over generics, as templates are a paradigm, and generics connotes a class of implementations. Templates in C++ also support value parameters, which if implemented in Go, would allow passing a function as a template parameter. This functionality would allow further customization of templated code.
+With the release of Go generics, a new paradigm has emerged: [templates][tutorialspoint]. Templates are not new, having been available in  C++ since 1991, and have become a standard through the work of teams like [boost][boost]. The term templates is used over generics, as templates are a paradigm, and generics connotes a class of implementations. Templates in C++ also support value parameters, which if implemented in Go, would allow passing a function as a template parameter. This functionality would allow further customization of templated code.
 
 What follows is a description of the packages in Motif, highlighting specific patterns and template implementations.  
 
 
 
 ## exchange
-[Exchange][exchangepkg] introduces a new design pattern for testing http.Client.Do() calls: DoProxy. A DoProxy is added to a context.Context, and all client requests
-are proxied,
-~~~
-// DoProxy - Http client.Do proxy type
-type DoProxy func(req *http.Request) (*http.Response, error)
+[Exchange][exchangepkg] includes the functionality needed to do an Http request/response. Exchange functionality is provied via a templated function, utilizing
+template paramters for error processing, deserialization type, and the function for processing the Http request/response:
+for processing an Http request/response:
 
-// ContextWithDo - DoProxy context creation
-func ContextWithDo(ctx context.Context, fn DoProxy) context.Context {
-	if ctx == nil {
-		ctx = context.Background()
-	} else {
-		if IsContextDo(ctx) {
-			return ctx
-		}
-	}
-	if fn == nil {
-		return ctx
-	}
-	return &doContext{ctx, doContextKey, fn} 
+func DoT[E runtime.ErrorHandler, T any, H Exchange](req *http.Request) (resp *http.Response, t T, status *runtime.Status) {
+    // implementation details
 }
 ~~~
 
-Http also includes a common http write response function:
+Testing Http calls is implemented through a new design pattern: a context.Context interface that contains an http.Client.Do() proxy.
+~~~
+// Exchange - interface for Http request/response interaction
+type Exchange interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+~~~
+
+Exchange also includes a common http write response function:
 ~~~
 func WriteResponse(w http.ResponseWriter, buf []byte, status *runtime.Status, headers ...string) {
-    // implementation
+    // implementation details
 }
 ~~~
 
