@@ -71,7 +71,7 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 
 
 ## runtime
-[Runtime][runtimepkg] implements environment, request context, status types, error, and output types The status type is used extensively as a function return value, and provides error, http, and gRPC status codes. 
+[Runtime][runtimepkg] implements environment, request context, status, error, and output types. The status type is used extensively as a function return value, and provides error, http, and gRPC status codes. 
 
 The error and output types are designed to be used as template parameters.
 
@@ -89,7 +89,7 @@ type OutputHandler interface {
 }
 ~~~
 
-Context functionality is provied for a request Id, and Http testing:
+Context functionality is provied for a request Id, and Http exchange testing:
 
 ~~~
 // ContextWithRequestId - creates a new Context with a request id
