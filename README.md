@@ -16,8 +16,8 @@ What follows is a description of the packages in Motif, highlighting specific pa
 
 
 
-## http
-[Http][httppkg] introduces a new design pattern for testing http.Client.Do() calls: DoProxy. A DoProxy is added to a context.Context, and all client requests
+## exchange
+[Exchange][exchangepkg] introduces a new design pattern for testing http.Client.Do() calls: DoProxy. A DoProxy is added to a context.Context, and all client requests
 are proxied,
 ~~~
 // DoProxy - Http client.Do proxy type
@@ -61,8 +61,7 @@ func Startup[E template.ErrorHandler, O template.OutputHandler](duration time.Du
 }
 ~~~
 
-## resource
-[Resource][resourcepkg] implements configuration map deserialization and validation.
+
 
 ## runtime
 [Runtime][runtimepkg] implements environment, request context, and status types. The status type is used extensively as a function return value, and provides error,
@@ -111,8 +110,8 @@ type OutputHandler interface {
 [tutorialspoint]: <https://www.tutorialspoint.com/cplusplus/cpp_templates.htm>
 [boost]: <https://www.boost.org/>
 [httppkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/http>
+[exchangepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/exchange>
 [messagingpkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/messaging>
-[resourcepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/resource>
 [runtimepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/runtime>
 [templatepkg]: <https://pkg.go.dev/github.com/idiomatic-go/motif/template>
 
