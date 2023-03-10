@@ -16,8 +16,8 @@ type DatabaseUrl struct {
 	Url string
 }
 
-// ActuatorApply - type for applying an actuator
-type ActuatorApply func(ctx context.Context, statusCode func() int, uri, requestId, method string) (fn func(), newCtx context.Context, rateLimited bool)
+// ControllerApply - type for applying a controller
+type ControllerApply func(ctx context.Context, statusCode func() int, uri, requestId, method string) (fn func(), newCtx context.Context, rateLimited bool)
 
 func NewStatusCode(status **runtime.Status) func() int {
 	return func() int {
@@ -51,13 +51,13 @@ func AccessDatabaseUrl(msg *Message) DatabaseUrl {
 	return DatabaseUrl{}
 }
 
-// AccessActuatorApply - access function for ActuatorApply in a message
-func AccessActuatorApply(msg *Message) ActuatorApply {
+// AccessControllerApply - access function for ControllerApply in a message
+func AccessControllerApply(msg *Message) ControllerApply {
 	if msg == nil || msg.Content == nil {
 		return nil
 	}
 	for _, c := range msg.Content {
-		if fn, ok := c.(ActuatorApply); ok {
+		if fn, ok := c.(ControllerApply); ok {
 			return fn
 		}
 	}

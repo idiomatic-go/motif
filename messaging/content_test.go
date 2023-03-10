@@ -18,7 +18,7 @@ var msgTest = Message{To: "to-uri", From: "from-uri", Content: []any{
 	errors.New("this is a content error message"),
 	func() bool { return false },
 	runtime.NewStatusError("location", errors.New("error message")).SetDuration(time.Second * 2),
-	ActuatorApply(func(ctx context.Context, statusCode func() int, uri, requestId, method string) (func(), context.Context, bool) {
+	ControllerApply(func(ctx context.Context, statusCode func() int, uri, requestId, method string) (func(), context.Context, bool) {
 		return func() {}, ctx, false
 	}),
 	runtime.HandleWithContext[runtime.DebugError](),
@@ -48,15 +48,15 @@ func ExampleAccessDatabaseUrl() {
 
 }
 
-func ExampleAccessActuatorApply() {
-	fmt.Printf("test: AccessActuatorApply(nil) -> [valid:%v]\n", AccessActuatorApply(nil) != nil)
-	fmt.Printf("test: AccessActuatorApply(msg) -> [valid:%v]\n", AccessActuatorApply(&Message{To: "to-uri"}) != nil)
-	fmt.Printf("test: AccessActuatorApply(msg) -> [valid:%v]\n", AccessActuatorApply(&msgTest) != nil)
+func ExampleAccessControllerApply() {
+	fmt.Printf("test: AccessControllerApply(nil) -> [valid:%v]\n", AccessControllerApply(nil) != nil)
+	fmt.Printf("test: AccessControllerApply(msg) -> [valid:%v]\n", AccessControllerApply(&Message{To: "to-uri"}) != nil)
+	fmt.Printf("test: AccessControllerApply(msg) -> [valid:%v]\n", AccessControllerApply(&msgTest) != nil)
 
 	//Output:
-	//test: AccessActuatorApply(nil) -> [valid:false]
-	//test: AccessActuatorApply(msg) -> [valid:false]
-	//test: AccessActuatorApply(msg) -> [valid:true]
+	//test: AccessControllerApply(nil) -> [valid:false]
+	//test: AccessControllerApply(msg) -> [valid:false]
+	//test: AccessControllerApply(msg) -> [valid:true]
 
 }
 
